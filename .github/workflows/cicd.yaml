@@ -72,10 +72,10 @@ jobs:
             if [ -d "$REPO_DIR" ]; then
               echo "Updating existing repo..."
               cd "$REPO_DIR"
-              git pull origin main
+              git pull origin main || { echo "Git pull failed"; exit 1; }
             else
-              echo " предот Cloning repo..."
-              git clone <YOUR_GITHUB_REPO_URL> "$REPO_DIR"
+              echo "Cloning repo..."
+              git clone https://github.com/Augustine423/code2mdt.git "$REPO_DIR" || { echo "Git clone failed"; exit 1; }
               cd "$REPO_DIR"
             fi
 
@@ -83,8 +83,14 @@ jobs:
             mkdir -p Backend/logs
             echo "Logs directory created"
 
+            # Verify docker-compose.yaml exists
+            if [ ! -f "docker-compose.yaml" ]; then
+              echo "Error: docker-compose.yaml not found in $REPO_DIR"
+              exit 1
+            fi
+
             # Build and tag images with version
-            COMMIT_SHA=$(git rev-parse --short HEAD)
+            COMMIT_SHA=$(git rev-parse --short HEAD) || { echo "Failed to get commit SHA"; exit 1; }
             echo "Building services with tag: ${COMMIT_SHA}"
             timeout 20m docker-compose build --progress=plain || { echo "Build timed out or failed"; exit 1; }
             docker tag frontend:latest frontend:${COMMIT_SHA}
