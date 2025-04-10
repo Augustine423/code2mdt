@@ -71,14 +71,14 @@ jobs:
             fi
 
             # Clone or update the repo
-            if [ -d "/home/ubuntu/telemetry-v02" ]; then
+            if [ -d "/home/ubuntu/code2mdt" ]; then
               echo "Updating existing repo..."
-              cd /home/ubuntu/telemetry-v02
+              cd /home/ubuntu/code2mdt
               git pull origin main
             else
               echo "Cloning repo..."
-              git clone https://github.com/Augustine423/telemetry-v02.git /home/ubuntu/telemetry-v02
-              cd /home/ubuntu/telemetry-v02
+              git clone https://github.com/Augustine423/code2mdt.git /home/ubuntu/code2mdt
+              cd /home/ubuntu/code2mdt
             fi
 
             # Create logs directory for backend (optional, remove if not needed)
@@ -109,7 +109,7 @@ jobs:
             echo "Connected to EC2 for Deploy"
 
             # Navigate to project directory
-            cd /home/ubuntu/telemetry-v02
+            cd /home/ubuntu/code2mdt
 
             # Store current image tags as previous
             if [ -f "previous_frontend_tag.txt" ]; then
@@ -162,7 +162,7 @@ jobs:
             echo "Connected to EC2 for Rollback"
 
             # Navigate to project directory
-            cd /home/ubuntu/telemetry-v02
+            cd /home/ubuntu/code2mdt
 
             # Check if previous image tags exist
             if [ ! -f "previous_frontend_tag_backup.txt" ] || [ ! -f "previous_backend_tag_backup.txt" ]; then
