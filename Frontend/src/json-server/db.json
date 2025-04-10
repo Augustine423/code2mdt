@@ -1,0 +1,1713 @@
+{
+  "companies": [
+    {
+      "id": "1",
+      "image": "http://52.79.57.3/assets/pilotInfo/pilot1.jpginformationdata/sajo logo.png",
+      "companyName": "Company 1",
+      "business_no": "10:10:00",
+      "country": "South Korea",
+      "homepage": "https://company1.com",
+      "establishment_year": 2005,
+      "employees": 150,
+      "address": "123 Seoul Street, South Korea",
+      "companyPhone": "010-0000-0000",
+      "faxNo": "02-000-0000",
+      "representative": "John Doe",
+      "email": "contact@company1.com",
+      "vessels": [
+        {
+          "id": 101,
+          "image": "http://52.79.57.3/assets/vessels/vessel1.png",
+          "name": "Vessel A",
+          "flag": "South Korea",
+          "imo": "1234567",
+          "mmsi": "987654321",
+          "call_sign": "ABC123"
+        },
+        {
+          "id": 102,
+          "image": "http://52.79.57.3/assets/vessels/vessel2.png",
+          "name": "Vessel B",
+          "flag": "South Korea",
+          "imo": "2345678",
+          "mmsi": "876543210",
+          "call_sign": "DEF456"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "image": "http://52.79.57.3/assets/informationdata/silla logo.png",
+      "companyName": "Company 2",
+      "business_no": "11-1111-1111",
+      "country": "USA",
+      "homepage": "https://company2.com",
+      "establishment_year": 2010,
+      "employees": 300,
+      "address": "456 New York Ave, USA",
+      "companyPhone": "020-1111-2222",
+      "faxNo": "02-111-2222",
+      "representative": "Jane Smith",
+      "email": "info@company2.com",
+      "vessels": [
+        {
+          "id": 201,
+          "image": "http://52.79.57.3/assets/vessels/vessel3.png",
+          "name": "Vessel X",
+          "flag": "USA",
+          "imo": "9876543",
+          "mmsi": "123456789",
+          "call_sign": "JKL123"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "image": "http://52.79.57.3/assets/informationdata/sajo logo.png",
+      "companyName": "Company 3",
+      "business_no": "22-2222-2222",
+      "country": "Japan",
+      "homepage": "https://company3.jp",
+      "establishment_year": 2015,
+      "employees": 200,
+      "address": "789 Tokyo St, Japan",
+      "companyPhone": "030-2222-3333",
+      "faxNo": "03-222-3333",
+      "representative": "Taro Yamada",
+      "email": "support@company3.jp",
+      "vessels": [
+        {
+          "id": 301,
+          "image": "http://52.79.57.3/assets/vessels/vessel4.png",
+          "name": "Vessel Z",
+          "flag": "Japan",
+          "imo": "7654321",
+          "mmsi": "321654987",
+          "call_sign": "PQR789"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "image": "http://52.79.57.3/assets/informationdata/silla logo.png",
+      "companyName": "Company 6",
+      "business_no": "55-5555-5555",
+      "country": "China",
+      "homepage": "https://company6.cn",
+      "establishment_year": 2008,
+      "employees": 800,
+      "address": "Beijing, China",
+      "companyPhone": "060-5555-6666",
+      "faxNo": "06-555-6666",
+      "representative": "Li Wei",
+      "email": "contact@company6.cn",
+      "vessels": [
+        {
+          "id": 601,
+          "image": "http://52.79.57.3/assets/vessels/vessel7.png",
+          "name": "Vessel O",
+          "flag": "China",
+          "imo": "4321098",
+          "mmsi": "789654321",
+          "call_sign": "YZA678"
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "image": "http://52.79.57.3/assets/informationdata/sajo logo.png",
+      "companyName": "Company 7",
+      "business_no": "66-6666-6666"
+    },
+    {
+      "id": "8",
+      "image": "http://52.79.57.3/assets/informationdata/silla logo.png",
+      "companyName": "Company 8",
+      "business_no": "77-7777-7777",
+      "country": "Canada",
+      "homepage": "https://company8.ca",
+      "establishment_year": 2011,
+      "employees": 400,
+      "address": "Toronto, Canada",
+      "companyPhone": "080-7777-8888",
+      "faxNo": "08-777-8888",
+      "representative": "Emma Wilson",
+      "email": "support@company8.ca",
+      "vessels": [
+        {
+          "id": 801,
+          "image": "http://52.79.57.3/assets/vessels/vessel9.png",
+          "name": "Vessel Q",
+          "flag": "Canada",
+          "imo": "2109876",
+          "mmsi": "789321654",
+          "call_sign": "EFG234"
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "image": "http://52.79.57.3/assets/informationdata/silla logo.png",
+      "companyName": "Company 10",
+      "business_no": "77-7777-7777",
+      "country": "Canada",
+      "homepage": "https://company8.ca",
+      "establishment_year": 2011,
+      "employees": 400,
+      "address": "Toronto, Canada",
+      "companyPhone": "080-7777-8888",
+      "faxNo": "08-777-8888",
+      "representative": "Emma Wilson",
+      "email": "support@company8.ca",
+      "vessels": [
+        {
+          "id": 801,
+          "image": "http://52.79.57.3/assets/vessels/vessel9.png",
+          "name": "Vessel Q",
+          "flag": "Canada",
+          "imo": "2109876",
+          "mmsi": "789321654",
+          "call_sign": "EFG234"
+        }
+      ]
+    }
+  ],
+  "vessels": [
+    {
+      "id": "1",
+      "image": "http://52.79.57.3/assets/vesselPhoto/shipImage_1.jpg",
+      "name": "Vessel A",
+      "flag": "USA",
+      "IMO": "1234567",
+      "MMSI": "7654321",
+      "callSign": "WXYZ",
+      "company": "OceanTech",
+      "officeNo": "101",
+      "address": "123 Marine St, NY",
+      "phoneNo": "+1-800-555-1234",
+      "email": "contact@oceantech.com",
+      "country": "USA",
+      "captain": "John Doe",
+      "captainPhone": "+1-800-555-5678",
+      "mates": [
+        {
+          "name": "Mate 1",
+          "phoneNo": "+1-800-555-1111"
+        },
+        {
+          "name": "Mate 2",
+          "phoneNo": "+1-800-555-2222"
+        },
+        {
+          "name": "Mate 3",
+          "phoneNo": "+1-800-555-3333"
+        }
+      ],
+      "records": [
+        {
+          "date": "2025-03-01",
+          "area": "Pacific",
+          "internalPilot": "Available",
+          "outsidePilot": "Required",
+          "loadDroneA": "Yes",
+          "loadDroneB": "No"
+        },
+        {
+          "date": "2025-03-01",
+          "area": "Pacific",
+          "internalPilot": "Unavailable",
+          "outsidePilot": "Not Required",
+          "loadDroneA": "No",
+          "loadDroneB": "No"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "image": "http://52.79.57.3/assets/vesselPhoto/shipimage.jpg",
+      "name": "Vessel B",
+      "flag": "UK",
+      "IMO": "9876543",
+      "MMSI": "3456789",
+      "callSign": "ABCD",
+      "company": "BlueWave",
+      "officeNo": "202",
+      "address": "456 Ocean Ave, London",
+      "phoneNo": "+44-700-555-5678",
+      "email": "support@bluewave.com",
+      "country": "UK",
+      "captain": "Jane Smith",
+      "captainPhone": "+44-700-555-8765",
+      "mates": [
+        {
+          "name": "Mate 1",
+          "phoneNo": "+44-700-555-1111"
+        },
+        {
+          "name": "Mate 2",
+          "phoneNo": "+44-700-555-2222"
+        },
+        {
+          "name": "Mate 3",
+          "phoneNo": "+44-700-555-3333"
+        }
+      ],
+      "records": [
+        {
+          "date": "2025-03-02",
+          "area": "Mediterranean",
+          "internalPilot": "Available",
+          "outsidePilot": "Not Required",
+          "loadDroneA": "Yes",
+          "loadDroneB": "Yes"
+        },
+        {
+          "date": "2025-03-03",
+          "area": "Mediterranean",
+          "internalPilot": "Available",
+          "outsidePilot": " Required",
+          "loadDroneA": "Yes",
+          "loadDroneB": "No"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "image": "http://52.79.57.3/assets/vesselPhoto/shipImage_1.jpg",
+      "name": "Vessel C",
+      "flag": "Canada",
+      "IMO": "4567890",
+      "MMSI": "8765432",
+      "callSign": "CDEF",
+      "company": "ArcticMarine",
+      "officeNo": "303",
+      "address": "789 Harbor Rd, Toronto",
+      "phoneNo": "+1-647-555-7890",
+      "email": "info@arcticmarine.com",
+      "country": "Canada",
+      "captain": "Michael Johnson",
+      "captainPhone": "+1-647-555-9876",
+      "mates": [
+        {
+          "name": "Mate 1",
+          "phoneNo": "+1-647-555-1111"
+        },
+        {
+          "name": "Mate 2",
+          "phoneNo": "+1-647-555-2222"
+        }
+      ],
+      "records": []
+    },
+    {
+      "id": "4",
+      "image": "http://52.79.57.3/assets/vesselPhoto/shipimage.jpg",
+      "name": "Vessel D",
+      "flag": "Germany",
+      "IMO": "6789012",
+      "MMSI": "2345678",
+      "callSign": "GHIJ",
+      "company": "Nordic Shipping",
+      "officeNo": "404",
+      "address": "22 Baltic Rd, Hamburg",
+      "phoneNo": "+49-40-555-4321",
+      "email": "support@nordicshipping.com",
+      "country": "Germany",
+      "captain": "Hans Müller",
+      "captainPhone": "+49-40-555-9876",
+      "mates": [
+        {
+          "name": "Mate 1",
+          "phoneNo": "+49-40-555-1111"
+        },
+        {
+          "name": "Mate 2",
+          "phoneNo": "+49-40-555-2222"
+        }
+      ],
+      "records": []
+    },
+    {
+      "id": "5",
+      "image": "http://52.79.57.3/assets/vesselPhoto/shipImage_1.jpg",
+      "name": "Vessel E",
+      "flag": "France",
+      "IMO": "7890123",
+      "MMSI": "9876543",
+      "callSign": "JKLM",
+      "company": "Atlantic Cargo",
+      "officeNo": "505",
+      "address": "77 Riviera Blvd, Marseille",
+      "phoneNo": "+33-4-555-6789",
+      "email": "contact@atlanticcargo.com",
+      "country": "France",
+      "captain": "Pierre Dupont",
+      "captainPhone": "+33-4-555-1234",
+      "mates": [],
+      "records": []
+    },
+    {
+      "id": "6",
+      "image": "http://52.79.57.3/assets/vesselPhoto/shipimage.jpg",
+      "name": "Vessel F",
+      "flag": "Italy",
+      "IMO": "8901234",
+      "MMSI": "4567890",
+      "callSign": "NOPQ",
+      "company": "Mediterranean Lines",
+      "officeNo": "606",
+      "address": "99 Port St, Naples",
+      "phoneNo": "+39-081-555-8765",
+      "email": "info@medlines.com",
+      "country": "Italy",
+      "captain": "Giovanni Rossi",
+      "captainPhone": "+39-081-555-4321",
+      "mates": [],
+      "records": []
+    },
+    {
+      "id": "7",
+      "image": "http://52.79.57.3/assets/vesselPhoto/shipImage_1.jpg",
+      "name": "Vessel G",
+      "flag": "Spain",
+      "IMO": "9012345",
+      "MMSI": "5678901",
+      "callSign": "RSTU",
+      "company": "Iberian Cargo",
+      "officeNo": "707",
+      "address": "88 Coastal St, Barcelona",
+      "phoneNo": "+34-93-555-2345",
+      "email": "contact@iberiancargo.com",
+      "country": "Spain",
+      "captain": "Carlos Fernandez",
+      "captainPhone": "+34-93-555-6789",
+      "mates": []
+    },
+    {
+      "id": "8",
+      "image": "http://52.79.57.3/assets/vesselPhoto/shipimage.jpg",
+      "name": "Vessel H",
+      "flag": "Japan",
+      "IMO": "1237894",
+      "MMSI": "6789012",
+      "callSign": "UVWX",
+      "company": "Tokyo Marine",
+      "officeNo": "808",
+      "address": "101 Shibuya Rd, Tokyo",
+      "phoneNo": "+81-3-555-7890",
+      "email": "support@tokyomarine.jp",
+      "country": "Japan",
+      "captain": "Hiroshi Tanaka",
+      "captainPhone": "+81-3-555-4321",
+      "mates": []
+    }
+  ],
+  "videos": [
+    {
+      "id": "1",
+      "title": "Yoon 1",
+      " time": "4:43",
+      "description": "This is the first video in the collection.",
+      "url": "https://www.youtube.com/watch?v=RlPNh_PBZb4",
+      "thumbnail": "https://example.com/thumb1.jpg",
+      "duration": "5:30",
+      "views": 1200,
+      "likes": 150,
+      "uploadDate": "2023-10-01",
+      "tags": ["tutorial", "education", "beginner"]
+    },
+    {
+      "id": "2",
+      "title": "Yoon 2",
+      " time": "5:30",
+      "description": "This is the second video in the collection.",
+      "url": "https://www.youtube.com/watch?v=RlPNh_PBZb4",
+      "thumbnail": "https://example.com/thumb2.jpg",
+      "duration": "7:45",
+      "views": 2500,
+      "likes": 300,
+      "uploadDate": "2023-10-05",
+      "tags": ["advanced", "tips", "tricks"]
+    }
+  ],
+
+  "pilotInfo": [
+     
+      {
+        "id": 1,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot1.jpg",
+        "employeeNo": "1",
+        "flightNo": "111",
+        "certificateNo": "B02163444",
+        "name": "김대희",
+        "licenseNumber": "B02163444",
+        "passportNumber": "211-05-002321",
+        "email": "bgs@kndre-drone.co.kr",
+        "phone": "010-7164-0502",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 111,
+        "flightDays": 266.605,
+        "flightTimeMinutes": 42678,
+        "flightDistanceKm": 1538
+      },
+      {
+        "id": 2,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot2.jpg",
+        "employeeNo": "2",
+        "flightNo": "48",
+        "certificateNo": "B01113137",
+        "name": "김유성",
+        "licenseNumber": "B01113137",
+        "passportNumber": "210-05-002119",
+        "email": "daseul@kndre-drone.co.kr",
+        "phone": "010-4333-9682",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 48,
+        "flightDays": 44.681,
+        "flightTimeMinutes": 1487,
+        "flightDistanceKm": 0
+      },
+      {
+        "id": 3,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot3.jpg",
+        "employeeNo": "3",
+        "flightNo": "200",
+        "certificateNo": "B01116654",
+        "name": "정희연",
+        "licenseNumber": "B01116654",
+        "passportNumber": "210-05-004505",
+        "email": "jihing@kndre-drone.co.kr",
+        "phone": "010-5693-2926",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 200,
+        "flightDays": 111,
+        "flightTimeMinutes": 20608,
+        "flightDistanceKm": 2213
+      },
+      {
+        "id": 4,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot4.jpg",
+        "employeeNo": "4",
+        "flightNo": "80",
+        "certificateNo": "B01118734",
+        "name": "김경호",
+        "licenseNumber": "B01118734",
+        "passportNumber": "210-05-005622",
+        "email": "yjs0509@kndre-drone.co.kr",
+        "phone": "010-3763-2209",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 80,
+        "flightDays": 10.124,
+        "flightTimeMinutes": 2961,
+        "flightDistanceKm": 289
+      },
+      {
+        "id": 5,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot5.jpg",
+        "employeeNo": "5",
+        "flightNo": "20",
+        "certificateNo": "B01119161",
+        "name": "김규리",
+        "licenseNumber": "B01119161",
+        "passportNumber": "210-05-006588",
+        "email": "kurea@kndre-drone.co.kr",
+        "phone": "010-9264-2034",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 20,
+        "flightDays": 3.204,
+        "flightTimeMinutes": 479,
+        "flightDistanceKm": 73
+      },
+      {
+        "id": 6,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot6.jpg",
+        "employeeNo": "6",
+      "flightNo": "180",
+      "certificateNo": "B01120388",
+        "name": "이기훈",
+        "licenseNumber": "B01120388",
+        "passportNumber": "210-05-007020",
+        "email": "kgh@kndre-drone.co.kr",
+        "phone": "010-3761-2744",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 180,
+        "flightDays": 61.294,
+        "flightTimeMinutes": 12890,
+        "flightDistanceKm": 918
+      },
+      {
+        "id": 7,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot7.jpg",
+        "employeeNo": "7",
+      "flightNo": "120",
+      "certificateNo": "B01204252",
+        "name": "박승수",
+        "licenseNumber": "B01204252",
+        "passportNumber": "210-05-007246",
+        "email": "ssg25team@kndre-drone.co.kr",
+        "phone": "010-3088-2034",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 120,
+        "flightDays": 81,
+        "flightTimeMinutes": 12261,
+        "flightDistanceKm": 739
+      },
+      {
+        "id": 8,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot8.jpg",
+        "employeeNo": "8",
+      "flightNo": "217",
+      "certificateNo": "B01200764",
+        "name": "송민",
+        "licenseNumber": "B01200764",
+        "passportNumber": "210-05-008726",
+        "email": "smds@kndre-drone.co.kr",
+        "phone": "010-7635-8328",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 217,
+        "flightDays": 71,
+        "flightTimeMinutes": 20105,
+        "flightDistanceKm": 1266
+      },
+      {
+        "id": 9,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot9.jpg",
+        "employeeNo": "9",
+        "flightNo": "170",
+        "certificateNo": "B01200557",
+        "name": "김정국",
+        "licenseNumber": "B01200557",
+        "passportNumber": "210-05-009024",
+        "email": "guami@kndre-drone.co.kr",
+        "phone": "010-3263-1831",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 170,
+        "flightDays": 63,
+        "flightTimeMinutes": 12291,
+        "flightDistanceKm": 0
+      },
+      {
+        "id": 10,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot10.jpg",
+        "employeeNo": "10",
+        "flightNo": "107",
+        "certificateNo": "B01200366",
+        "name": "이호성",
+        "licenseNumber": "B01200366",
+        "passportNumber": "210-05-009466",
+        "email": "sileeg@kndre-drone.co.kr",
+        "phone": "010-7942-1834",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 107,
+        "flightDays": 61,
+        "flightTimeMinutes": 19164,
+        "flightDistanceKm": 1268
+      },
+      {
+        "id": 11,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot11.jpg",
+        "employeeNo": "11",
+      "flightNo": "70",
+      "certificateNo": "B01200907",
+        "name": "이현승",
+        "licenseNumber": "B01200907",
+        "passportNumber": "210-05-010028",
+        "email": "lhs@kndre-drone.co.kr",
+        "phone": "010-2963-6838",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 70,
+        "flightDays": 6,
+        "flightTimeMinutes": 601,
+        "flightDistanceKm": 0
+      },
+      {
+        "id": 12,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot12.jpg",
+        "employeeNo": "12",
+        "flightNo": "150",
+        "certificateNo": "B01201534",
+        "name": "전동욱",
+        "licenseNumber": "B01201534",
+        "passportNumber": "210-05-011738",
+        "email": "tdwoo@kndre-drone.co.kr",
+        "phone": "010-9223-0078",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 150,
+        "flightDays": 35.548,
+        "flightTimeMinutes": 3178,
+        "flightDistanceKm": 879
+      },
+      {
+        "id": 13,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot13.jpg",
+        "employeeNo": "13",
+      "flightNo": "284",
+      "certificateNo": "B01201794",
+        "name": "박영선",
+        "licenseNumber": "B01201794",
+        "passportNumber": "210-05-012186",
+        "email": "sileeg@kndre-drone.co.kr",
+        "phone": "010-6764-1981",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 284,
+        "flightDays": 71,
+        "flightTimeMinutes": 26086,
+        "flightDistanceKm": 1907
+      },
+      {
+        "id": 14,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot14.jpg",
+        "employeeNo": "14",
+        "flightNo": "78",
+        "certificateNo": "B01202252",
+        "name": "이상민",
+        "licenseNumber": "B01202252",
+        "passportNumber": "210-05-013066",
+        "email": "alsgh1217@naver.com",
+        "phone": "010-4435-8634",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 78,
+        "flightDays": 64,
+        "flightTimeMinutes": 6885,
+        "flightDistanceKm": 598
+      },
+      {
+        "id": 15,
+        "image": "http://52.79.57.3/assets/pilotInfo/pilot15.jpg",
+        "employeeNo": "15",
+      "flightNo": "79",
+      "certificateNo": "B01202761",
+        "name": "정영채",
+        "licenseNumber": "B01202761",
+        "passportNumber": "210-05-014404",
+        "email": "youngch@kndre-drone.co.kr",
+        "phone": "010-9133-4118",
+        "employmentStatus": "Active",
+        "country": "Korea",
+        "flightCount": 79,
+        "flightDays": 60,
+        "flightTimeMinutes": 4789,
+        "flightDistanceKm": 604
+      }
+    ],
+
+  "pilots": [
+    {
+      "seaWork": [
+        {
+          "id": 1,
+          "pilot": "John Doe",
+          "boardingPeriod": "2024-01-01 to 2024-03-01",
+          "boardDays": 60,
+          "vacationDays": 30,
+          "landDays": 10
+        },
+        {
+          "id": 2,
+          "pilot": "Jane Smith",
+          "boardingPeriod": "2024-02-01 to 2024-04-01",
+          "boardDays": 58,
+          "vacationDays": 32,
+          "landDays": 15
+        }
+      ],
+      "vacation": [
+        {
+          "id": 3,
+          "pilot": "John Doe",
+          "vacationPeriod": "2024-03-02 to 2024-04-01",
+          "beLeftDay": 5
+        },
+        {
+          "id": 4,
+          "pilot": "Jane Smith",
+          "vacationPeriod": "2024-04-02 to 2024-05-01",
+          "beLeftDay": 3
+        }
+      ],
+      "landWork": [
+        {
+          "id": 5,
+          "pilot": "John Doe",
+          "landWorkPeriod": "2024-04-02 to 2024-06-01",
+          "beLeftDay": 7
+        },
+        {
+          "id": 6,
+          "pilot": "Jane Smith",
+          "landWorkPeriod": "2024-05-02 to 2024-07-01",
+          "beLeftDay": 6
+        }
+      ]
+    }
+  ],
+  "reports": [
+    {
+      "dailyReport": [
+        {
+          "id": 1,
+          "reportNo": "250306-AA-AA",
+          "author": "John Doe",
+          "classification": "Drone Maintenance",
+          "vessel": "SAJO FAMILA",
+          "date": "03.05.24",
+          "latitude": "00-00'N",
+          "longitude": "000-00'E",
+          "boatCount": "00Boat Count / date 00",
+          "fishHoldStatus": "0t / 1,175t",
+          "pilot1": "25.01.26 / date 54",
+          "pilot2": "25.01.29 / date 54",
+          "checker": "Alice",
+          "droneInfo": [
+            {
+              "droneNo": "VT000",
+              "flightCount": 23,
+              "flightTime": 150,
+              "flightDistance": 300,
+              "safetyNotes": "test",
+              "remarks": "test"
+            },
+            {
+              "droneNo": "VT001",
+              "flightCount": 54,
+              "flightTime": 160,
+              "flightDistance": 250,
+              "safetyNotes": "check",
+              "remarks": "Check"
+            },
+            {
+              "droneNo": "VT005",
+              "flightCount": 57,
+              "flightTime": 140,
+              "flightDistance": 270,
+              "safetyNotes": "Maintenance",
+              "remarks": "Maintenance"
+            }
+          ],
+          "operation": [
+            {
+              "operatingDrone": "VT000",
+              "flightDistance": 115,
+              "flightRange": 20,
+              "flightTime": 98,
+              "coordinates": "00°10'N, 00°14'E",
+              "padBuoy": 12,
+              "catchQuantity": 12,
+              "contributionToCatch": 10,
+              "battery": 0,
+              "cruisingAltitude": 300,
+              "notes": "-"
+            },
+            {
+              "operatingDrone": "VT004",
+              "flightDistance": 155,
+              "flightRange": 70,
+              "flightTime": 48,
+              "coordinates": "00°10'N, 00°14'E",
+              "padBuoy": 17,
+              "catchQuantity": 14,
+              "contributionToCatch": 18,
+              "battery": 1,
+              "cruisingAltitude": 200,
+              "notes": "test"
+            }
+          ],
+          "issue": ["text", "text1", "text2"],
+          "failuresAndDefects": "test",
+          "referenceFiles": [
+            "http://52.79.57.3/assets/reportData/text.txt",
+            "http://52.79.57.3/assets/reportData/test.txt"
+          ]
+        }
+      ],
+      "incidentReport": [
+        {
+          "id": 2,
+          "reportNo": "250306-AA-BB",
+          "author": "Alice",
+          "classification": "Marine",
+          "vessel": "SAJO Alice",
+          "machineryInfo": "AN001",
+          "date": "02.12.24",
+          "detailDate": "2025-03-06/AM 03:25",
+          "type": "Testing",
+          "location": "Korea",
+          "detail": "testing",
+          "altitude": "5,000 ft",
+          "speed": "320 knots",
+          "communication": "Preparing for landing approach",
+          "battery": "41% remaining",
+          "remark": "Descent initiated at 17:10",
+          "cloudiness": "Partly cloudy, 4/8 coverage",
+          "precipitation": "Light drizzle, 0.5mm/hr",
+          "temperature": "18°C / 64.4°F",
+          "windSpeed": "12 knots, NNE direction",
+          "flightEnvironment": "Class G airspace, rural area",
+          "gpsCommStatus": "Strong GPS signal (12 satellites), radio comms clear",
+          "nearbyObstacles": "Power lines 0.5km east, 80m cell tower 2km south",
+          "occurrence": "2023-03-15T08:20:00Z",
+          "damageType": "Water damage",
+          "extent": "Severe",
+          "incidentDetail": "Unexpected rain shower during flight operation caused water ingress to electronic components",
+          "target": "Main circuit board and battery connections",
+          "causeResult": "Signal interference caused loss of control for 3.5 seconds",
+          "locationPart": "Communication module / Antenna connection",
+          "logAnalysis": "Flight logs show sudden drop in signal strength at 14:32:15, followed by erratic control inputs",
+          "additionality": "Similar incidents reported in areas with high RF interference",
+          "flightRestrictions": "Minimum altitude 150ft AGL over populated areas. No flights over wildlife reserves during nesting season (April-June). Maximum flight duration 45 minutes. No operations in visibility less than 3 miles.",
+          "actionItems": "File flight plan with regional office 24hrs in advance\n2. Conduct site survey before first flight in new area\n3. Verify all telemetry systems operational\n4. Establish communication with ground observers\n5. Confirm emergency landing zones identified",
+          "preventivePlan": "Engine inspection every 15 flight hours. Control surface calibration monthly. Fuel system check before each flight day. Navigation system accuracy verification weekly. Pilot currency maintained with minimum 3 flights per month.",
+          "attachment": "http://52.79.57.3/assets/reportData/text.txt",
+          "reference": "testing incident"
+        }
+      ],
+      "maintenanceReport": [
+        {
+          "id": 3,
+          "reportNo": "250306-AA-CC",
+          "author": "Bob",
+          "classification": "Fish",
+          "date": "07.08.2024",
+          "vessel": "Pacific Voyager",
+          "droneInfo": "Fishing Drone",
+          "maintenanceDate": {
+            "startDate": "03.12.23",
+            "endDate": "03.11.23"
+          },
+          "leadMechanic": "Sarah Martinez",
+          "dateOfOccurrence": "03/10/2023",
+          "parts": [
+            {
+              "name": "Motor",
+              "result": "Wrong",
+              "notes": "Excessive vibration detected during startup sequence. Bearing appears worn."
+            },
+            {
+              "name": "Propeller",
+              "result": "Damage",
+              "notes": "Visible crack on blade B. Requires immediate replacement before next flight."
+            },
+            {
+              "name": "ESC",
+              "result": "None",
+              "notes": "Operating within normal parameters. No issues detected."
+            },
+            {
+              "name": "Battery",
+              "result": "None",
+              "notes": "Voltage and capacity within expected range. No swelling observed."
+            },
+            {
+              "name": "Sensor",
+              "result": "None",
+              "notes": "All sensors calibrated and functioning correctly."
+            },
+            {
+              "name": "GPS/Comm Status",
+              "result": "None",
+              "notes": "Strong signal reception. Communication links stable."
+            },
+            {
+              "name": "Beacon",
+              "result": "None",
+              "notes": "Beacon signal strong and correctly registered."
+            },
+            {
+              "name": "FlightController",
+              "result": "None",
+              "notes": "Firmware up to date. All systems responding normally."
+            },
+            {
+              "name": "GCS (Option)",
+              "result": "None",
+              "notes": "Ground control station connection stable."
+            },
+            {
+              "name": "Remark",
+              "result": "None",
+              "notes": "Recommend motor replacement at next scheduled maintenance."
+            }
+          ],
+          "model": "Autel EVO II Pro",
+          "stockQuantity": 2,
+          "serialNo": "AEII2103567, AEII2103568",
+          "remarks": "Extended battery package. Scheduled for firmware update on April 10.",
+          "operationTest": "Necessary",
+          "flightTest": "Necessary",
+          "detailInfo": "Complete testing suite required following ESC replacement and GPS antenna repositioning. Verify all systems functioning correctly before returning to service.",
+          "necessaryTasks": "Necessary",
+          "planDetailInfo": "This structure captures the basic inventory information shown in the form, along with additional metadata that would be useful for inventory management.",
+          "remarkDetailInfo": "The expanded version includes multiple items with various details like categories, locations, values, and status to provide a",
+          "attachment": "http://52.79.57.3/assets/reportData/text.txt"
+        }
+      ],
+      "itemRequestReport": [
+        {
+          "id": 4,
+          "reportNo": "250306-AA-DD",
+          "author": "Lucie",
+          "date": "09.10.24",
+          "vessel": "Pacific Voyager",
+          "quantity": "23",
+          "hs_code": "12345678",
+          "classification": "Ship Management",
+          "item_name": "Laptop",
+          "item_detail": "Dell XPS 15, 16GB RAM, 512GB SSD",
+          "required_quantity": "10",
+          "requested_quantity": "8",
+          "supplier_link": "http://52.79.57.3/assets/pilotInfo/supplier",
+          "mandatory_requirements": "Warranty of at least 1 year",
+          "reason": "Replacement for outdated laptops",
+          "amount": "1200",
+          "total_amount": "9600",
+          "personInCharge":"Alice Bob"
+        }
+      ],
+      "handoverReport": [
+        {
+          "id": 5,
+          "reportNo": "250306-AA-EE",
+          "author": "Cathy",
+          "vessel": "John Alice",
+          "date": "06.06.24",
+          "handover_date": {
+            "startDate": "03.12.23",
+            "endDate": "03.11.23"
+          },
+          "team_name": "Development Team",
+          "transferor": "Internal Pilot",
+          "transferee": "External Pilot",
+          "manager": "John Doe",
+          "remarks": "Handover completed successfully",
+          "work_details": [
+            {
+              "no": 1,
+              "work_detail": "Fix UI bugs in the dashboard",
+              "remarks": "Completed"
+            },
+            {
+              "no": 2,
+              "work_detail": "Optimize database queries",
+              "remarks": "In progress"
+            },
+            {
+              "no": 3,
+              "work_detail": "Update API documentation",
+              "remarks": "Pending review"
+            }
+          ],
+          "reference": "Project XYZ - Sprint 5",
+          "classification": "Electronics",
+          "itemName": "Drone No1112",
+          "status": "None",
+          "location": "Daegu",
+          "itemReference": "testing Drone",
+          "requiredAction": "testing is required",
+          "unresolvedTasks": "need to testing drone",
+          "progressStatus": "Ongoing",
+          "plannedTasks": "drone will be check",
+          "taskRemarks": "testing and maintaining is still required.",
+          "message": "drone system will still remain."
+        }
+      ],
+      "takeoverReport": [
+        {
+          "id": 6,
+          "reportNo": "250306-AA-FF",
+          "author": "Mary",
+          "vessel": "John Doe",
+          "date": "02.03.24",
+          "takeover_date": {
+            "startDate": "2025-04-01",
+            "endDate": "2025-04-10"
+          },
+          "teamName": "option1",
+          "transferor": "John",
+            "team_name":"Ship Team",
+         
+          "transferee":  "Mike",
+            
+          "manager": "Zayn Malik",
+          "remarks": "I will be sent to you this report.",
+          "work_details": [
+            {
+              "no": 1,
+              "work_detail": "Fix UI bugs in the dashboard",
+              "remarks": "Completed"
+            },
+            {
+              "no": 2,
+              "work_detail": "Optimize database queries",
+              "remarks": "In progress"
+            },
+            {
+              "no": 3,
+              "work_detail": "Update API documentation",
+              "remarks": "Pending review"
+            }
+          ],
+          "takeoverReference": "Project XYZ - Sprint 5",
+          "takeoverSign": {
+            "status": "Sign Refusal",
+            "remarks": "User refused due to missing information."
+          },
+          "classification": "System Maintenance",
+          "itemName": "Takeover by John",
+          "status": "Unused",
+          "location": "Busan",
+          "itemReference": "Project ABC - Sprint 6",
+          "requiredActions": "need to check overall project",
+          "itemTakeoverSign": {
+            "status": "Sign",
+            "remarks": "User Information Complete."
+          },
+          "unresolvedTasks": "need to testing marine",
+          "progressStatus": "Unconfirmed",
+          "plannedTasks": "drone will be check",
+          "takeoverRemarks": "Extended battery package. Scheduled for firmware update on April 10.",
+          "taskTakeoverSign": {
+            "status": "Sign Refusal",
+            "remarks": "User refused due to missing information."
+          },
+          "message": "drone system will be able to check."
+        }
+      ]
+    }
+  ],
+  
+"materials": [
+  {
+    "id": 1,
+    "image": "https://example.com/images/drone1.jpg",
+    "model": "FC",
+    "serialNo": "M3-0001",
+    "useNo": "U-1001",
+    "manufacturer": "DJI",
+    "useStatus": "X",
+    "useTimeLifeTime": "2025/04/01",
+    "useTime": "120h",
+    "lifeTime": "500h",
+    "storageArea": "Warehouse A",
+    "placeOfBuy": "DJI Official Store",
+    "stockDate": "2023-06-10",
+    "expectedReplacementTime": "2026-06-10"
+  },
+  {
+    "id": 2,
+    "image": "https://example.com/images/drone2.jpg",
+    "model": "FC",
+    "serialNo": "M4-0002",
+    "useNo": "U-1002",
+    "manufacturer": "DDD",
+    "useStatus": "X",
+    "useTimeLifeTime": "2025/04/01",
+    "useTime": "120h",
+    "lifeTime": "500h",
+    "storageArea": "Warehouse B",
+    "placeOfBuy": "Amazon",
+    "stockDate": "2023-07-12",
+    "expectedReplacementTime": "2026-07-12"
+  },
+  {
+    "id": 3,
+    "image": "https://example.com/images/drone3.jpg",
+    "model": "FC",
+    "serialNo": "PA-2398",
+    "useNo": "U-1003",
+    "manufacturer": "Parrot",
+    "useStatus": "X",
+    "useTimeLifeTime": "2025/04/01",
+    "useTime": "120h",
+    "lifeTime": "500h",
+    "storageArea": "Warehouse A",
+    "placeOfBuy": "Parrot Store",
+    "stockDate": "2023-08-15",
+    "expectedReplacementTime": "2026-08-15"
+  },
+  {
+    "id": 4,
+    "image": "https://example.com/images/drone4.jpg",
+    "model": "FC",
+    "serialNo": "AE2-9083",
+    "useNo": "U-1004",
+    "manufacturer": "Autel Robotics",
+    "useStatus": "X",
+    "useTimeLifeTime": "2025/04/01",
+    "useTime": "120h",
+    "lifeTime": "500h",
+    "storageArea": "Warehouse C",
+    "placeOfBuy": "Autel Distributors",
+    "stockDate": "2023-09-20",
+    "expectedReplacementTime": "2026-09-20"
+  },
+  {
+    "id": 5,
+    "image": "https://example.com/images/drone5.jpg",
+    "model": "FC",
+    "serialNo": "SX2-1123",
+    "useNo": "U-1005",
+    "manufacturer": "Skydio",
+    "useStatus": "X",
+    "useTimeLifeTime": "2025/04/01",
+    "useTime": "120h",
+    "lifeTime": "500h",
+    "storageArea": "Warehouse B",
+    "placeOfBuy": "Skydio Official",
+    "stockDate": "2023-10-05",
+    "expectedReplacementTime": "2026-10-05"
+  },
+  {
+    "id": 6,
+    "image": "https://example.com/images/drone6.jpg",
+    "model": "FC",
+    "serialNo": "YTH3-7766",
+    "useNo": "U-1006",
+    "manufacturer": "Yuneec",
+    "useStatus": "X",
+    "useTimeLifeTime": "2025/04/01",
+    "useTime": "120h",
+    "lifeTime": "500h",
+    "storageArea": "Warehouse A",
+    "placeOfBuy": "Yuneec Distributor",
+    "stockDate": "2023-11-01",
+    "expectedReplacementTime": "2026-11-01"
+  }
+],
+
+
+  "records": [
+    {
+      "id": "1",
+      "date": "2025-03-11",
+      "title": "Pacific Ocean",
+      "total_count": "1",
+      "vessel": "FAMILIA",
+      "drone": "MDT001-001,MDT001",
+      "pilot": "James Smith,Robert Johnson"
+    },
+    {
+      "id": "2",
+      "date": "2025-04-17",
+      "title": "Atlantic Ocean",
+      "total_count": "5",
+      "vessel": "FAMILIA",
+      "drone": "MDT001-001,MDT001",
+      "pilot": "SEUNGRI KIM,SEUNGRI KIM"
+    },
+    {
+      "id": "3",
+      "date": "2025-02-12",
+      "title": "Indian Ocean",
+      "total_count": "8",
+      "vessel": "Aiocn-Flight",
+      "drone": "MDT001-001,MDT001",
+      "pilot": "SEUNGRI KIM,SEUNGRI KIM"
+    },
+    {
+      "id": "4",
+      "date": "2025-04-13",
+      "title": "Indian and Pacific Ocean",
+      "total_count": "4",
+      "vessel": "Aiocn-Flight",
+      "drone": "MDT001-001,MDT001",
+      "pilot": "SEUNGRI KIM,SEUNGRI KIM"
+    },
+    {
+      "id": "5",
+      "date": "2025-01-23",
+      "title": "South Pacific Ocean",
+      "total_count": "3",
+      "vessel": "AI-Motion",
+      "drone": "MDT004-004,MDT021",
+      "pilot": "James Smith,Robert Johnson"
+    },
+    {
+      "id": "6",
+      "date": "2025-06-15",
+      "title": "Southern Ocean",
+      "total_count": "9",
+      "vessel": "Oceanic-Explorer",
+      "drone": "MDT003-004,MDT003",
+      "pilot": "Kevin Thomas,Brian Jackson"
+    },
+    {
+      "id": "7",
+      "date": "2025-04-23",
+      "title": "Myanmar Sea",
+      "total_count": "12",
+      "vessel": "AI-Motion",
+      "drone": "MDT004-004,MDT021",
+      "pilot": "Jame Johnson,Seungri Kim"
+    }
+  ],
+  "schedules": [
+    {
+      "id": "1",
+      "date": "25.03.01~26.01.01",
+      "company": "Sajo",
+      "vessel": "FAMILIA",
+      "drone": "MDT001-001,MDT001",
+      "pilot": "SEUNGRI KIM,SEUNGRI KIM"
+    },
+    {
+      "id": "2",
+      "date": "25.03.01~26.01.01",
+      "company": "Majo",
+      "vessel": "FAMILIA",
+      "drone": "MDT001-0013,MDT0021",
+      "pilot": "SEUNGRI KIM,SEUNGRI KIM"
+    },
+    {
+      "id": "3",
+      "date": "25.03.01~26.01.01",
+      "company": "FAJO",
+      "vessel": "FAMILIA",
+      "drone": "MDT0011-0011,MDT00231",
+      "pilot": "SEUNGRI KIM,SEUNGRI KIM"
+    },
+    {
+      "id": "4",
+      "date": "25.03.01~26.01.01",
+      "company": "Majo",
+      "vessel": "FAMILIA",
+      "drone": "MDT001-0013,MDT0021",
+      "pilot": "SEUNGRI KIM,SEUNGRI KIM"
+    },
+    {
+      "id": "5",
+      "date": "25.03.01~26.01.01",
+      "company": "Lajo",
+      "vessel": "FAMILIA",
+      "drone": "MDT001-0013,MDT0021",
+      "pilot": "SEUNGRI KIM,SEUNGRI KIM"
+    },
+    {
+      "id": "6",
+      "date": "25.03.01~26.01.01",
+      "company": "Pajo",
+      "vessel": "FAMILIA",
+      "drone": "MDT001-0013,MDT0021",
+      "pilot": "SEUNGRI KIM,SEUNGRI KIM"
+    }
+  ],
+  "images": [
+    {
+      "id": "1",
+      "author": "Seungri Kim",
+      "image1": "http://52.79.57.3/assets/imageGallery/imageGallery.png",
+      "image2": "http://52.79.57.3/assets/imageGallery/imageG.png",
+      "imageName": "image 1",
+      "time": "10:10:00",
+      "date": "2025-01-03"
+    },
+    {
+      "id": "2",
+      "author": "Seungri Kim",
+      "image1": "http://52.79.57.3/assets/imageGallery/image-3.png",
+      "image2": "http://52.79.57.3/assets/imageGallery/image-4.png",
+      "imageName": "image 2",
+      "time": "10:10:00",
+      "date": "2025-01-02"
+    },
+    {
+      "id": "3",
+      "author": "Seungri Park",
+      "image1": "http://52.79.57.3/assets/imageGallery/image-5.png",
+      "image2": "http://52.79.57.3/assets/imageGallery/image-6.png",
+      "imageName": "image 3",
+      "time": "11:10:00",
+      "date": "2025-01-01"
+    },
+    {
+      "id": "4",
+      "author": "Seungri Park",
+      "image1": "http://52.79.57.3/assets/imageGallery/image-7.png",
+      "image2": "http://52.79.57.3/assets/imageGallery/image-8.png",
+      "imageName": "image 6",
+      "time": "11:10:00",
+      "date": "2025-01-09"
+    },
+    {
+      "id": "5",
+      "author": "Seungri Park",
+      "image1": "http://52.79.57.3/assets/imageGallery/image-9.png",
+      "image2": "http://52.79.57.3/assets/imageGallery/image-10.png",
+      "imageName": "image 7",
+      "time": "11:10:00",
+      "date": "2025-01-10"
+    },
+    {
+      "id": "6",
+      "author": "Seungri Park",
+      "image1": "http://52.79.57.3/assets/imageGallery/image-11.png",
+      "image2": "http://52.79.57.3/assets/imageGallery/image-12.png",
+      "imageName": "image 8",
+      "time": "12:20:00",
+      "date": "2025-01-11"
+    },
+    {
+      "id": "7",
+      "author": "Seungri Park",
+      "image1": "http://52.79.57.3/assets/imageGallery/image-13.png",
+      "image2": "http://52.79.57.3/assets/imageGallery/image-14.png",
+      "imageName": "image 10",
+      "time": "12:20:00",
+      "date": "2025-01-12"
+    },
+    {
+      "id": "8",
+      "author": "Seungri Park",
+      "image1": "http://52.79.57.3/assets/imageGallery/image-15.png",
+      "image2": "http://52.79.57.3/assets/imageGallery/image-16.png",
+      "imageName": "image name",
+      "time": "11:10:00",
+      "date": "2025-01-01"
+    },
+    {
+      "id": "9",
+      "author": "Seungri Park",
+      "image1": "http://52.79.57.3/assets/imageGallery/image-17.png",
+      "image2": "http://52.79.57.3/assets/imageGallery/image-18.png",
+      "imageName": "image 9",
+      "time": "11:10:00",
+      "date": "2025-01-09"
+    },
+    {
+      "id": "10",
+      "author": "Seungri Park",
+      "image1": "http://52.79.57.3/assets/imageGallery/image-19.png",
+      "image2": "http://52.79.57.3/assets/imageGallery/image-20.png",
+      "imageName": "image 10",
+      "time": "11:10:00",
+      "date": "2025-01-10"
+    },
+    {
+      "id": "11",
+      "author": "Seungri Park",
+      "image1": "http://52.79.57.3/assets/imageGallery/image-21.png",
+      "image2": "http://52.79.57.3/assets/imageGallery/image-22.png",
+      "imageName": "image 11",
+      "time": "12:20:00",
+      "date": "2025-01-11"
+    },
+    {
+      "id": "12",
+      "author": "Seungri Park",
+      "image1": "http://52.79.57.3/assets/imageGallery/image-23.png",
+      "image2": "http://52.79.57.3/assets/imageGallery/image-24.png",
+      "imageName": "image 12",
+      "time": "12:20:00",
+      "date": "2025-01-12"
+    }
+  ],
+  "vesselsrecord": [
+    {
+      "id": 1,
+      "date": "2025-04-08",
+      "area": "Area Alpha",
+      "internalPilot": "John Doe",
+      "outsidePilot": "Jane Smith",
+      "loadDroneA": "Medical Supplies",
+      "loadDroneB": "Food Package"
+    },
+    {
+      "id": 2,
+      "date": "2025-04-09",
+      "area": "Area Beta",
+      "internalPilot": "Mike Ross",
+      "outsidePilot": "Rachel Zane",
+      "loadDroneA": "Camera Equipment",
+      "loadDroneB": "Mapping Kit"
+    },
+    {
+      "id": 3,
+      "date": "2025-04-10",
+      "area": "Area Gamma",
+      "internalPilot": "Harvey Specter",
+      "outsidePilot": "Donna Paulsen",
+      "loadDroneA": "Delivery Box A",
+      "loadDroneB": "Delivery Box B"
+    },
+    {
+      "id": 4,
+      "date": "2025-04-11",
+      "area": "Area Delta",
+      "internalPilot": "Jessica Pearson",
+      "outsidePilot": "Louis Litt",
+      "loadDroneA": "Spare Parts",
+      "loadDroneB": "Fuel Cell"
+    },
+    {
+      "id": 5,
+      "date": "2025-04-12",
+      "area": "Area Omega",
+      "internalPilot": "Katrina Bennett",
+      "outsidePilot": "Alex Williams",
+      "loadDroneA": "Survey Tools",
+      "loadDroneB": "Emergency Kit"
+    }
+  ],
+
+  "flightLog": [
+    {
+      "id": "1",
+      "occurrenceTime": "2025.04.09 09:30:00",
+      "no": 1,
+      "fileName": "incident_report_01.mp4",
+      "author": "John Doe",
+      "date": "2025.04.09"
+    },
+    {
+      "id": "2",
+      "occurrenceTime": "2025.04.08 14:15:00",
+      "no": 2,
+      "fileName": "security_footage_12.mp4",
+      "author": "Jane Smith",
+      "date": "2025.04.08"
+    },
+    {
+      "id": "3",
+      "occurrenceTime": "2025.04.07 18:45:00",
+      "no": 3,
+      "fileName": "drone_capture_A17.mp4",
+      "author": "Alex Kim",
+      "date": "2025.04.07"
+    },
+    {
+      "id": "4",
+      "occurrenceTime": "2025.04.07 10:20:00",
+      "no": 4,
+      "fileName": "inspection_log_20250407.mp4",
+      "author": "Emily Chen",
+      "date": "2025.04.07"
+    },
+    {
+      "id": "5",
+      "occurrenceTime": "2025.04.06 16:10:00",
+      "no": 5,
+      "fileName": "flight_replay_XY32.mp4",
+      "author": "Michael Lee",
+      "date": "2025.04.06"
+    }
+  ],
+"droneInfo": [
+  {
+    "id": 1,
+    "serial_no": "SN001",
+    "image": "http://52.79.57.3/assets/drone.png",
+    "color_id": "C001",
+    "control_no": "CTRL001",
+    "drone_id": "DRN001",
+    "id_fc_version_info": "v1.0"
+  },
+  {
+    "id": 2,
+    "serial_no": "SN002",
+    "image": "http://52.79.57.3/assets/drone.png",
+    "color_id": "C002",
+    "control_no": "CTRL002",
+    "drone_id": "DRN002",
+    "id_fc_version_info": "v1.1"
+  },
+  {
+    "id": 3,
+    "serial_no": "SN003",
+    "image": "http://52.79.57.3/assets/drone.png",
+    "color_id": "C003",
+    "control_no": "CTRL003",
+    "drone_id": "DRN003",
+    "id_fc_version_info": "v1.2"
+  },
+  {
+    "id": 4,
+    "serial_no": "SN004",
+    "image": "http://52.79.57.3/assets/drone.png",
+    "color_id": "C004",
+    "control_no": "CTRL004",
+    "drone_id": "DRN004",
+    "id_fc_version_info": "v1.0"
+  },
+  {
+    "id": 5,
+    "serial_no": "SN005",
+    "image": "http://52.79.57.3/assets/drone.png",
+    "color_id": "C005",
+    "control_no": "CTRL005",
+    "drone_id": "DRN005",
+    "id_fc_version_info": "v1.1"
+  },
+  {
+    "id": 6,
+    "serial_no": "SN006",
+    "image": "http://52.79.57.3/assets/drone.png",
+    "color_id": "C006",
+    "control_no": "CTRL006",
+    "drone_id": "DRN006",
+    "id_fc_version_info": "v1.2"
+  },
+  {
+    "id": 7,
+    "serial_no": "SN007",
+    "image": "http://52.79.57.3/assets/drone.png",
+    "color_id": "C007",
+    "control_no": "CTRL007",
+    "drone_id": "DRN007",
+    "id_fc_version_info": "v1.0"
+  },
+  {
+    "id": 8,
+    "serial_no": "SN008",
+    "image": "http://52.79.57.3/assets/drone.png",
+    "color_id": "C008",
+    "control_no": "CTRL008",
+    "drone_id": "DRN008",
+    "id_fc_version_info": "v1.1"
+  },
+  {
+    "id": 9,
+    "serial_no": "SN009",
+    "image": "http://52.79.57.3/assets/drone.png",
+    "color_id": "C009",
+    "control_no": "CTRL009",
+    "drone_id": "DRN009",
+    "id_fc_version_info": "v1.2"
+  },
+  {
+    "id": 10,
+    "serial_no": "SN010",
+    "image": "http://52.79.57.3/assets/drone.png",
+    "color_id": "C010",
+    "control_no": "CTRL010",
+    "drone_id": "DRN010",
+    "id_fc_version_info": "v1.0"
+  }
+],
+"mechanics":[
+  {
+    "id": "1",
+    "name": "John Doe",
+    "image": "http://52.79.57.3/assets/pilotInfo/pilot1.jpg",
+    "mechanic": "John Doe",
+    "employee_no": "EMP001",
+    "email": "johndoe@example.com",
+    "position": "Senior Mechanic",
+    "ph_number": "09123456789",
+    "sign": "http://52.79.57.3/assets/signatures/sign1.png"
+  },
+  {
+    "id": "2",
+    "name": "Jane Smith",
+    "image": "http://52.79.57.3/assets/pilotInfo/pilot12.jpg",
+    "mechanic": "Jane Smith",
+    "employee_no": "EMP002",
+    "email": "janesmith@example.com",
+    "position": "Junior Mechanic",
+    "ph_number": "09234567890",
+    "sign": "http://52.79.57.3/assets/signatures/sign2.png"
+  },
+  {
+    "id": "3",
+    "name": "Robert Brown",
+    "image": "http://52.79.57.3/assets/pilotInfo/pilot4.jpg",
+    "mechanic": "Robert Brown",
+    "employee_no": "EMP003",
+    "email": "robertbrown@example.com",
+    "position": "Lead Mechanic",
+    "ph_number": "09345678901",
+    "sign": "http://52.79.57.3/assets/signatures/sign3.png"
+  },
+  {
+    "id": "4",
+    "name": "Emily Clark",
+    "image": "http://52.79.57.3/assets/pilotInfo/pilot16.jpg",
+    "mechanic": "Emily Clark",
+    "employee_no": "EMP004",
+    "email": "emilyclark@example.com",
+    "position": "Mechanic",
+    "ph_number": "09456789012",
+    "sign": "http://52.79.57.3/assets/signatures/sign4.png"
+  },
+  {
+    "id": "5",
+    "name": "Michael Johnson",
+    "image": "http://52.79.57.3/assets/pilotInfo/pilot17.jpg",
+    "mechanic": "Michael Johnson",
+    "employee_no": "EMP005",
+    "email": "michaeljohnson@example.com",
+    "position": "Senior Mechanic",
+    "ph_number": "09567890123",
+    "sign": "http://52.79.57.3/assets/signatures/sign5.png"
+  },
+  {
+    "id": "6",
+    "name": "Sarah Lee",
+    "image": "http://52.79.57.3/assets/pilotInfo/pilot18.jpg",
+    "mechanic": "Sarah Lee",
+    "employee_no": "EMP006",
+    "email": "sarahlee@example.com",
+    "position": "Junior Mechanic",
+    "ph_number": "09678901234",
+    "sign": "http://52.79.57.3/assets/signatures/sign6.png"
+  },
+  {
+    "id": "7",
+    "name": "David White",
+    "image": "http://52.79.57.3/assets/pilotInfo/pilot19.jpg",
+    "mechanic": "David White",
+    "employee_no": "EMP007",
+    "email": "davidwhite@example.com",
+    "position": "Mechanic",
+    "ph_number": "09789012345",
+    "sign": "http://52.79.57.3/assets/signatures/sign7.png"
+  },
+  {
+    "id": "8",
+    "name": "Sophia Davis",
+    "image": "http://52.79.57.3/assets/pilotInfo/pilot20.jpg",
+    "mechanic": "Sophia Davis",
+    "employee_no": "EMP008",
+    "email": "sophiadavis@example.com",
+    "position": "Lead Mechanic",
+    "ph_number": "09890123456",
+    "sign": "http://52.79.57.3/assets/signatures/sign8.png"
+  },
+  {
+    "id": "9",
+    "name": "William Moore",
+    "image": "http://52.79.57.3/assets/pilotInfo/pilot3.jpg",
+    "mechanic": "William Moore",
+    "employee_no": "EMP009",
+    "email": "williammoore@example.com",
+    "position": "Mechanic",
+    "ph_number": "09901234567",
+    "sign": "http://52.79.57.3/assets/signatures/sign9.png"
+  },
+  {
+    "id": "10",
+    "name": "Olivia Martinez",
+    "image": "http://52.79.57.3/assets/pilotInfo/pilot6.jpg",
+    "mechanic": "Olivia Martinez",
+    "employee_no": "EMP010",
+    "email": "oliviamartinez@example.com",
+    "position": "Senior Mechanic",
+    "ph_number": "09109876543",
+    "sign": "http://52.79.57.3/assets/signatures/sign10.png"
+  }
+]
+
+
+}
