@@ -102,9 +102,9 @@ jobs:
             COMMIT_SHA=$(git rev-parse --short HEAD) || { echo "Failed to get commit SHA"; exit 1; }
             echo "Building services with tag: ${COMMIT_SHA}"
             timeout 20m docker-compose build --progress=plain || { echo "Build timed out or failed"; exit 1; }
-            docker tag code2mdt_frontend:latest frontend:${COMMIT_SHA}
-            docker tag code2mdt_backend:latest backend:${COMMIT_SHA}
-            docker tag code2mdt_backend1:latest backend1:${COMMIT_SHA}
+            docker tag code2mdt-frontend:latest frontend:${COMMIT_SHA}
+            docker tag code2mdt-backend:latest backend:${COMMIT_SHA}
+            docker tag code2mdt-backend1:latest backend1:${COMMIT_SHA}
           EOF
           rm -f private_key.pem
 
@@ -132,9 +132,9 @@ jobs:
             # Clean up old tags (keep latest and current SHA)
             COMMIT_SHA=$(git rev-parse --short HEAD)
             echo "Cleaning up old image tags..."
-            docker images code2mdt_frontend --format "{{.Tag}}" | grep -v "latest" | grep -v "${COMMIT_SHA}" | xargs -I {} docker rmi code2mdt_frontend:{} || true
-            docker images code2mdt_backend --format "{{.Tag}}" | grep -v "latest" | grep -v "${COMMIT_SHA}" | xargs -I {} docker rmi code2mdt_backend:{} || true
-            docker images code2mdt_backend1 --format "{{.Tag}}" | grep -v "latest" | grep -v "${COMMIT_SHA}" | xargs -I {} docker rmi code2mdt_backend1:{} || true
+            docker images code2mdt-frontend --format "{{.Tag}}" | grep -v "latest" | grep -v "${COMMIT_SHA}" | xargs -I {} docker rmi code2mdt-frontend:{} || true
+            docker images code2mdt-backend --format "{{.Tag}}" | grep -v "latest" | grep -v "${COMMIT_SHA}" | xargs -I {} docker rmi code2mdt-backend:{} || true
+            docker images code2mdt-backend1 --format "{{.Tag}}" | grep -v "latest" | grep -v "${COMMIT_SHA}" | xargs -I {} docker rmi code2mdt-backend1:{} || true
 
             # Prune unused resources
             echo "Pruning Docker system..."
