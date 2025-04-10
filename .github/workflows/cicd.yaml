@@ -16,6 +16,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           EC2_INSTANCE_IP: ${{ secrets.EC2_INSTANCE_IP }}
+          FRONTEND_ENV: ${{ secrets.FRONTEND_ENV }}
         run: |
           echo -e "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
@@ -77,6 +78,14 @@ jobs:
               echo "Cloning repo..."
               git clone https://github.com/Augustine423/code2mdt.git "$REPO_DIR" || { echo "Git clone failed"; exit 1; }
               cd "$REPO_DIR"
+            fi
+
+            # Create .env file for frontend from secret
+            echo "Creating .env file for frontend..."
+            echo "$FRONTEND_ENV" > Frontend/.env
+            if [ ! -f "Frontend/.env" ]; then
+              echo "Error: Failed to create Frontend/.env"
+              exit 1
             fi
 
             # Create logs directory for backend
