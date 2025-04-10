@@ -98,10 +98,10 @@ jobs:
               exit 1
             fi
 
-            # Build and tag images with version
+            # Build and tag images with version (no cache for fresh builds)
             COMMIT_SHA=$(git rev-parse --short HEAD) || { echo "Failed to get commit SHA"; exit 1; }
             echo "Building services with tag: ${COMMIT_SHA}"
-            timeout 20m docker-compose build --progress=plain || { echo "Build timed out or failed"; exit 1; }
+            timeout 20m docker-compose build --no-cache --progress=plain || { echo "Build timed out or failed"; exit 1; }
             docker tag code2mdt-frontend:latest frontend:${COMMIT_SHA}
             docker tag code2mdt-backend:latest backend:${COMMIT_SHA}
             docker tag code2mdt-backend1:latest backend1:${COMMIT_SHA}
@@ -129,16 +129,15 @@ jobs:
             echo "Stopping running containers..."
             docker-compose down
 
-            # Clean up old tags (keep latest and current SHA)
+            # Clean up all unused images except the current ones
             COMMIT_SHA=$(git rev-parse --short HEAD)
-            echo "Cleaning up old image tags..."
-            docker images code2mdt-frontend --format "{{.Tag}}" | grep -v "latest" | grep -v "${COMMIT_SHA}" | xargs -I {} docker rmi code2mdt-frontend:{} || true
-            docker images code2mdt-backend --format "{{.Tag}}" | grep -v "latest" | grep -v "${COMMIT_SHA}" | xargs -I {} docker rmi code2mdt-backend:{} || true
-            docker images code2mdt-backend1 --format "{{.Tag}}" | grep -v "latest" | grep -v "${COMMIT_SHA}" | xargs -I {} docker rmi code2mdt-backend1:{} || true
+            echo "Cleaning up old images..."
+            docker images --format "{{.Repository}}:{{.Tag}}" | grep -v "frontend:${COMMIT_SHA}" | grep -v "backend:${COMMIT_SHA}" | grep -v "backend1:${COMMIT_SHA}" | grep -v "code2mdt-frontend:latest" | grep -v "code2mdt-backend:latest" | grep -v "code2mdt-backend1:latest" | xargs -I {} docker rmi {} || true
 
-            # Prune unused resources
-            echo "Pruning Docker system..."
-            docker system prune -f
+            # Prune Docker system (images, containers, networks, build cache)
+            echo "Pruning Docker system comprehensively..."
+            docker system prune --all --force
+            docker builder prune --all --force
 
             # Deploy the new version
             echo "Deploying with latest tags..."
@@ -147,5 +146,9 @@ jobs:
             # Show running containers
             echo "Running containers:"
             docker ps
+
+            # Show remaining images for verification
+            echo "Remaining Docker images:"
+            docker images
           EOF
           rm -f private_key.pem
