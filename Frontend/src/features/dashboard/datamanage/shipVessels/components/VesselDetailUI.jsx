@@ -3,6 +3,7 @@ import Pagination from "../../../../../components/Pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { fetchVesselById } from "../../../../../stores/informationData/vesselSlice";
+import vesselImage from "../../../../../assets/vesselPhoto/shipimage.jpg"
 import NotFound from "../../../../../components/NotFound";
 import VesselRecordTable from "./VesselRecordTable";
 
@@ -55,7 +56,7 @@ const VesselDetailUI = () => {
             <div className="w-[280px] h-[150px] bg-gray-100 rounded-md flex items-center justify-center">
               <img
                 // src={currentVessel.shipLogo}
-                 src="/src/assets/vesselPhoto/shipimage.jpg"
+                 src={vesselImage}
                 alt={currentVessel.name}
                 className="max-w-full max-h-full object-contain"
               />
