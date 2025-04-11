@@ -21,7 +21,7 @@ const VesselsGridView = () => {
   
 
   useEffect(() => {
-    dispatch(fetchVessels({ page, size: 10 }));
+    dispatch(fetchVessels({ page, size: 12 }));
   }, [dispatch, page]);
 
   console.log("vessels value is", vessels)
@@ -39,7 +39,7 @@ const VesselsGridView = () => {
       if (!vesselId) return;
       try {
         await dispatch(deleteVessel(vesselId)).unwrap();
-        dispatch(fetchVessels({ page, size: 10 }));
+        dispatch(fetchVessels({ page, size: 12 }));
       } catch (error) {
         console.error("Error while deleting vessel:", error);
       }
