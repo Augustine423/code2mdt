@@ -169,4 +169,3 @@ jobs:
             # Show remaining images for verification
             echo "Remaining Docker images:"
             docker images
-          EOF
