@@ -113,10 +113,6 @@ jobs:
             docker tag code2mdt-frontend:latest frontend:${COMMIT_SHA}
             docker tag code2mdt-backend:latest backend:${COMMIT_SHA}
             docker tag code2mdt-backend1:latest backend1:${COMMIT_SHA}
-
-            # Prune all unused Docker objects after successful build
-            echo "Pruning all unused Docker objects..."
-            docker system prune -a -f || { echo "Failed to prune Docker system"; exit 1; }
           EOF
           rm -f private_key.pem
 
@@ -145,22 +141,13 @@ jobs:
             COMMIT_SHA=$(git rev-parse --short HEAD) || { echo "Failed to get commit SHA"; exit 1; }
             echo "Current commit SHA: ${COMMIT_SHA}"
 
-            # Clean up unused images (exclude current commit and latestBRIDGE tags)
-            echo "Cleaning up old Docker images..."
-            docker images --format "{{.Repository}}:{{.Tag}}" | grep -E "code2mdt-(frontend|backend|backend1)" | \
-            grep -v -E ":${COMMIT_SHA}|:latest" | sort -u | while read -r image; do
-              echo "Removing image: $image"
-              docker rmi "$image" || true
-            done
-
-            # Prune unused containers, networks, and dangling images
-            echo "Pruning unused Docker objects..."
-            docker system prune --force || { echo "Failed to prune Docker system"; exit 1; }
-            docker builder prune --force || { echo "Failed to prune Docker builder"; exit 1; }
-
             # Deploy the new version
             echo "Deploying with latest tags..."
             docker-compose up -d || { echo "Failed to deploy containers"; exit 1; }
+
+            # Prune all unused Docker objects after successful deployment
+            echo "Pruning all unused Docker objects..."
+            docker system prune -a -f || { echo "Failed to prune Docker system"; exit 1; }
 
             # Show running containers
             echo "Running containers:"
