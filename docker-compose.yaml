@@ -3,34 +3,37 @@ services:
     build:
       context: ./Frontend
       dockerfile: Dockerfile
-    image: aioceaneye/frontend:latest
     ports:
       - "80:80"
+      - "3003:3003"
     depends_on:
       - backend
     networks:
-      - aioceaneye-network  
+      - mdt-network
 
   backend:
     build:
       context: ./Backend
       dockerfile: Dockerfile
-    image: aioceaneye/backend:latest
     ports:
       - "8081:8081"
+      - "14552-14559:14552-14559/udp"
+      - "15000-15009:15000-15009/udp"
+    volumes:
+      - ./logs:/app/logs
     networks:
-      - aioceaneye-network 
+      - mdt-network
+
   backend1:
     build:
       context: ./Backend1
       dockerfile: Dockerfile
-    image: aioceaneye/backend1:latest
     ports:
-      - "8080:8080"
       - "3306:3306"
+      - "8080:8080"
     networks:
-      - aioceaneye-network  
+      - mdt-network
 
 networks:
-  aioceaneye-network:  
+  mdt-network:
     driver: bridge
