@@ -68,7 +68,7 @@ jobs:
             fi
 
             # Install wget for downloading .env file
-            if ! command -v wget >/dev/nullama1 2>&1; then
+            if ! command -v wget >/dev/null 2>&1; then
               echo "Installing wget..."
               sudo apt-get install -y wget
             fi
@@ -113,6 +113,10 @@ jobs:
             docker tag code2mdt-frontend:latest frontend:${COMMIT_SHA}
             docker tag code2mdt-backend:latest backend:${COMMIT_SHA}
             docker tag code2mdt-backend1:latest backend1:${COMMIT_SHA}
+
+            # Prune all unused Docker objects after successful build
+            echo "Pruning all unused Docker objects..."
+            docker system prune -a -f || { echo "Failed to prune Docker system"; exit 1; }
           EOF
           rm -f private_key.pem
 
@@ -141,7 +145,7 @@ jobs:
             COMMIT_SHA=$(git rev-parse --short HEAD) || { echo "Failed to get commit SHA"; exit 1; }
             echo "Current commit SHA: ${COMMIT_SHA}"
 
-            # Clean up unused images (exclude current commit and latest tags)
+            # Clean up unused images (exclude current commit and latestBRIDGE tags)
             echo "Cleaning up old Docker images..."
             docker images --format "{{.Repository}}:{{.Tag}}" | grep -E "code2mdt-(frontend|backend|backend1)" | \
             grep -v -E ":${COMMIT_SHA}|:latest" | sort -u | while read -r image; do
