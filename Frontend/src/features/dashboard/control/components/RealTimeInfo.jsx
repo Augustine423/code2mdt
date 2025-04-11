@@ -10,6 +10,7 @@ import { IoMdSearch } from "react-icons/io";
 import { AiOutlineMenu } from "react-icons/ai";
 import { FaMap } from "react-icons/fa";
 import { BsFillPrinterFill } from "react-icons/bs";
+import { ImVideoCamera } from "react-icons/im";
 import useTranslations from "../../../../components/Language";
 import Footer from "../../../../components/Footer";
 import FlightData from "./FlightData";
@@ -90,7 +91,8 @@ const RealTimeInfo = () => {
   useEffect(() => {
     const connectWebSocket = () => {
       console.log("Attempting WebSocket connection...");
-      const wsUrl = "ws://52.79.57.3:8081/telemetry";
+      const wsUrl = "ws://52.78.238.179:8080/telemetry";
+      // const wsUrl = "ws://52.79.57.3:8080/telemetry";
       ws.current = new WebSocket(wsUrl);
 
       ws.current.onopen = () => {
@@ -223,11 +225,15 @@ const [videoView, setVideoView] = useState(false);
       </div>
 
       {shipDetails && (
-        <div className="absolute top-[70px] left-7 w-1/5 h-5/6 bg-white z-40 flex flex-col rounded-md shadow-md overflow-y-scroll no-scrollbar cursor-grabbing">
+        <div className="absolute top-[60px] left-7 w-1/5 h-6/6 bg-white z-40 flex flex-col rounded-md shadow-md ">
           {/* Ship Name */}
           <div className="w-full pt-1 pb-1 pl-3 pr-3 flex justify-between items-center bg-transparent shadow-md">
             <span className="font-semibold">Serena ver.2</span>
-            <RxCross2 onClick={() => setShipDetails(!shipDetails)} className="cursor-pointer" />
+            <div className="flex justify-center items-center gap-2">
+              <img src="video_icon.png" className="text-primary cursor-pointer object-contain size-5" onClick={() => setVideoView(true)}/>
+              <RxCross2 size={"20px"} onClick={() => setShipDetails(!shipDetails)} className="text-primary cursor-pointer" />
+            </div>
+            
           </div>
 
           {/* Ship Image */}
@@ -304,24 +310,6 @@ const [videoView, setVideoView] = useState(false);
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Video and WayPoint buttons */}
-          <div className="w-full flex pt-1 pb-1 pl-3 pr-3 gap-2 mt-3 mb-3">
-            <button
-              className="flex justify-center items-center w-1/2 bg-[#3B5BDC] bg-opacity-[8%] text-white rounded-md pl-4 pr-4 pt-2 pb-2 gap-3"
-              onClick={() => setVideoView(true)}
-            >
-              <img src="videoIcon.png" alt="" className="w-6 h-6" />
-              <span className="text-primary font-semibold">{t.video}</span>
-            </button>
-            <button
-              className="flex justify-center items-center w-1/2 bg-[#3B5BDC] bg-opacity-[8%] text-white rounded-md pl-4 pr-4 pt-2 pb-2 gap-3"
-              onClick={() => setWayPointsVisible(!wayPointsVisible)}
-            >
-              <img src="compassIcon.png" alt="" className="w-6 h-6" />
-              <span className="text-primary font-semibold">{t.wayPoints}</span>
-            </button>
           </div>
         </div>
       )}
