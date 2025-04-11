@@ -170,4 +170,3 @@ jobs:
             echo "Remaining Docker images:"
             docker images
           EOF
-          rm -f private_key.pem
