@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Camera, Upload } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import vesselImage from "../../../../../assets/vesselPhoto/shipimage.jpg"
 import { useDispatch, useSelector } from "react-redux";
 
 import { fetchVesselById, fetchVessels, updateVessel } from "../../../../../stores/informationData/vesselSlice.js";
@@ -99,7 +100,7 @@ const VesselEditForm = () => {
                 </div> */}
                  <img
                 // src={currentCompany.coLogo}
-                src="/src/assets/vesselPhoto/shipimage.jpg"
+                src={vesselImage}
                 // alt={currentCompany.coName}
                 className="max-w-full max-h-full object-contain"
               />
