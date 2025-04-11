@@ -1,12 +1,9 @@
 
-
-
-
-import Pagination from "../../../../../components/Pagination";
 import PageLoading from "../../../../../components/PageLoading";
 import NotFound from "../../../../../components/NotFound";
 import MechanicRow from "../../mechanic/components/MechanicRow";
 import { useSelector } from "react-redux";
+import PaginationMechanic from "../../../../../components/PaginationMechanic";
 const MechanicTable = () => {
   const { mechanics, loading, error } = useSelector(
     (state) => state.mechanics || {}
@@ -59,7 +56,7 @@ const MechanicTable = () => {
           </table>
         </div>
 
-        <Pagination />
+        <PaginationMechanic />
       </div>
     </>
   );

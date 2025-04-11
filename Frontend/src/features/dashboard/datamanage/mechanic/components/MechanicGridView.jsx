@@ -93,7 +93,7 @@
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import Pagination from "../../../../../components/Pagination";
+
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { Link } from "react-router-dom";
 // import { deleteMechanic, fetchMechanics } from "../../../../../stores/informationData/mechanicSlice";
@@ -101,6 +101,7 @@ import { Link } from "react-router-dom";
 import { usePopup } from "../../../../../hooks/usePopup";
 import PilotEmptyStage from "../../pilot/components/PilotEmptyStage";
 import { fetchMechanicInfo } from "../../../../../stores/informationData/mechanicInfoSlice";
+import PaginationMechanic from "../../../../../components/PaginationMechanic";
 
 const MechanicGridView = () => {
   const dispatch = useDispatch();
@@ -110,6 +111,7 @@ const MechanicGridView = () => {
     const { mechanics, loading, error } = useSelector(
       (state) => state.mechanics|| {}
     );
+    console.log("this is mechanic", mechanics);
 
   useEffect(() => {
     dispatch(fetchMechanicInfo());
@@ -227,7 +229,7 @@ const MechanicGridView = () => {
             ))}
           </div>
 
-          <Pagination />
+          <PaginationMechanic />
        
       </div>
     </>

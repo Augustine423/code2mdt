@@ -1599,113 +1599,36 @@
 "mechanics":[
   {
     "id": "1",
-    "name": "John Doe",
-    "image": "http://52.79.57.3/assets/pilotInfo/pilot1.jpg",
+    "name": "박의정",
+    "image": "/src/assets/mechanicData/mechanic1.jpg",
     "mechanic": "John Doe",
-    "employee_no": "EMP001",
-    "email": "johndoe@example.com",
-    "position": "Senior Mechanic",
-    "ph_number": "09123456789",
-    "sign": "http://52.79.57.3/assets/signatures/sign1.png"
+    "employee_no": "2402_03",
+    "email": "ejpark@marine-drone.co.kr",
+    "position": "Deputy Manager",
+    "ph_number": "010-4578-4752",
+    "sign": "/src/assets/mechanicData/mechanicSign1.jpg"
   },
   {
     "id": "2",
     "name": "Jane Smith",
-    "image": "http://52.79.57.3/assets/pilotInfo/pilot12.jpg",
+    "image": "/src/assets/mechanicData/mechanic2.jpg",
     "mechanic": "Jane Smith",
-    "employee_no": "EMP002",
-    "email": "janesmith@example.com",
+    "employee_no": "2407_07",
+    "email": "alroid@marine-drone.co.kr",
     "position": "Junior Mechanic",
-    "ph_number": "09234567890",
-    "sign": "http://52.79.57.3/assets/signatures/sign2.png"
+    "ph_number": "010-8481-2486",
+   "sign": "/src/assets/mechanicData/mechanicSign2.jpg"
   },
   {
     "id": "3",
     "name": "Robert Brown",
-    "image": "http://52.79.57.3/assets/pilotInfo/pilot4.jpg",
+    "image": "/src/assets/mechanicData/mechanic3.jpg",
     "mechanic": "Robert Brown",
-    "employee_no": "EMP003",
-    "email": "robertbrown@example.com",
+    "employee_no": "2411_02",
+    "email": "kws@marine-drone.co.kr",
     "position": "Lead Mechanic",
-    "ph_number": "09345678901",
-    "sign": "http://52.79.57.3/assets/signatures/sign3.png"
-  },
-  {
-    "id": "4",
-    "name": "Emily Clark",
-    "image": "http://52.79.57.3/assets/pilotInfo/pilot16.jpg",
-    "mechanic": "Emily Clark",
-    "employee_no": "EMP004",
-    "email": "emilyclark@example.com",
-    "position": "Mechanic",
-    "ph_number": "09456789012",
-    "sign": "http://52.79.57.3/assets/signatures/sign4.png"
-  },
-  {
-    "id": "5",
-    "name": "Michael Johnson",
-    "image": "http://52.79.57.3/assets/pilotInfo/pilot17.jpg",
-    "mechanic": "Michael Johnson",
-    "employee_no": "EMP005",
-    "email": "michaeljohnson@example.com",
-    "position": "Senior Mechanic",
-    "ph_number": "09567890123",
-    "sign": "http://52.79.57.3/assets/signatures/sign5.png"
-  },
-  {
-    "id": "6",
-    "name": "Sarah Lee",
-    "image": "http://52.79.57.3/assets/pilotInfo/pilot18.jpg",
-    "mechanic": "Sarah Lee",
-    "employee_no": "EMP006",
-    "email": "sarahlee@example.com",
-    "position": "Junior Mechanic",
-    "ph_number": "09678901234",
-    "sign": "http://52.79.57.3/assets/signatures/sign6.png"
-  },
-  {
-    "id": "7",
-    "name": "David White",
-    "image": "http://52.79.57.3/assets/pilotInfo/pilot19.jpg",
-    "mechanic": "David White",
-    "employee_no": "EMP007",
-    "email": "davidwhite@example.com",
-    "position": "Mechanic",
-    "ph_number": "09789012345",
-    "sign": "http://52.79.57.3/assets/signatures/sign7.png"
-  },
-  {
-    "id": "8",
-    "name": "Sophia Davis",
-    "image": "http://52.79.57.3/assets/pilotInfo/pilot20.jpg",
-    "mechanic": "Sophia Davis",
-    "employee_no": "EMP008",
-    "email": "sophiadavis@example.com",
-    "position": "Lead Mechanic",
-    "ph_number": "09890123456",
-    "sign": "http://52.79.57.3/assets/signatures/sign8.png"
-  },
-  {
-    "id": "9",
-    "name": "William Moore",
-    "image": "http://52.79.57.3/assets/pilotInfo/pilot3.jpg",
-    "mechanic": "William Moore",
-    "employee_no": "EMP009",
-    "email": "williammoore@example.com",
-    "position": "Mechanic",
-    "ph_number": "09901234567",
-    "sign": "http://52.79.57.3/assets/signatures/sign9.png"
-  },
-  {
-    "id": "10",
-    "name": "Olivia Martinez",
-    "image": "http://52.79.57.3/assets/pilotInfo/pilot6.jpg",
-    "mechanic": "Olivia Martinez",
-    "employee_no": "EMP010",
-    "email": "oliviamartinez@example.com",
-    "position": "Senior Mechanic",
-    "ph_number": "09109876543",
-    "sign": "http://52.79.57.3/assets/signatures/sign10.png"
+    "ph_number": "010-9505-5902",
+   "sign": "/src/assets/mechanicData/mechanicSign3.jpg"
   }
 ]
 
