@@ -1,10 +1,13 @@
 package com.example.drone.client;
 
-import com.example.drone.config.TelemetryWebSocketHandler;
+import com.example.drone.config.TelemetryWebSocketHandler; // Assuming this exists; adjust if not
 import io.dronefleet.mavlink.MavlinkConnection;
 import io.dronefleet.mavlink.MavlinkMessage;
 import io.dronefleet.mavlink.ardupilotmega.Wind;
 import io.dronefleet.mavlink.common.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import java.io.*;
 import java.net.*;
 import java.text.SimpleDateFormat;
@@ -12,41 +15,40 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.springframework.stereotype.Component;
+import java.util.concurrent.TimeUnit;
 
 @Component
+@RequiredArgsConstructor
 public class MavlinkClient {
-    private final List<Integer> udpPorts = List.of(14552,14553,14554,14555,14556,14557, 14558,14559,15000,15001,15002,15003,15004,15005);
+    private final List<Integer> udpPorts = List.of(14552, 14553, 14554, 14555, 14556, 14557, 14558, 14559, 15000, 15001, 15002, 15003, 15004, 15005);
     private final Map<Integer, Integer> totalMissionItems = new ConcurrentHashMap<>();
     private final Map<Integer, Boolean> requestedMissionList = new ConcurrentHashMap<>();
-    private final Map<Integer, List<Map<String, Object>>> waypointsPerPort = new ConcurrentHashMap<>();  // ✅ Store waypoints per port
+    private final Map<Integer, List<Map<String, Object>>> waypointsPerPort = new ConcurrentHashMap<>();
     private final ExecutorService executorService = Executors.newFixedThreadPool(udpPorts.size() + 1);
     private final Map<Integer, LinkedHashMap<String, Object>> telemetryUdpDataMap = new ConcurrentHashMap<>();
-    private final Map<Integer, Long> lastTelemetryUpdate = new ConcurrentHashMap<>(); // ✅ Store last update timestamp
-    private final long TELEMETRY_TIMEOUT_MS = 5000; // ✅ If no update in 5 seconds, consider it disconnected
+    private final Map<Integer, Long> lastTelemetryUpdate = new ConcurrentHashMap<>();
+    private final long TELEMETRY_TIMEOUT_MS = 5000; // 5 seconds timeout for inactive drones
     private final Map<Integer, InetAddress> portToAddressMap = new ConcurrentHashMap<>();
-    private boolean isPrintingActive = true;
+    private volatile boolean isPrintingActive = true;
+    private volatile boolean isRunning = true;
     private final Set<Integer> activePorts = ConcurrentHashMap.newKeySet();
     private final Map<Integer, Map<String, Double>> homeLocations = new ConcurrentHashMap<>();
 
-
-    // ✅ Date formatter for dynamic timestamps
     private final SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public MavlinkClient() {
         for (int port : udpPorts) {
             telemetryUdpDataMap.put(port, initializeTelemetryData());
-            waypointsPerPort.put(port, new ArrayList<>()); // ✅ Initialize waypoint list
+            waypointsPerPort.put(port, new ArrayList<>);
             createLogFile(port);
-
         }
+        Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
     }
-
 
     private LinkedHashMap<String, Object> initializeTelemetryData() {
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("GCS_IP", "Unknown");
-        data.put("timestamp", getCurrentTimestamp()); // ✅ Dynamic timestamp added
+        data.put("timestamp", getCurrentTimestamp());
         data.put("systemid", "Unknown");
         data.put("lat", null);
         data.put("lon", null);
@@ -73,14 +75,13 @@ public class MavlinkClient {
         data.put("battery_voltage", 0.0);
         data.put("battery_current", 0.0);
         data.put("waypoints_count", 0);
-
         return data;
     }
 
     public void startListening() {
         for (int port : udpPorts) {
             requestedMissionList.put(port, false);
-            waypointsPerPort.put(port, new ArrayList<>());  // ✅ Initialize waypoints list per port
+            waypointsPerPort.put(port, new ArrayList<>);
             executorService.execute(() -> startUdpListener(port));
         }
         executorService.execute(this::printAndLogTelemetryData);
@@ -88,78 +89,35 @@ public class MavlinkClient {
 
     private void startUdpListener(int port) {
         try {
-            List<InetAddress> zeroTierIPs = getZeroTierIPs();
-            if (zeroTierIPs.isEmpty()) {
-                System.err.println("❌ No ZeroTier IPs found, binding to 0.0.0.0 as fallback.");
-                zeroTierIPs.add(InetAddress.getByName("0.0.0.0"));
-            }
+            try (DatagramSocket udpSocket = new DatagramSocket(new InetSocketAddress("0.0.0.0", port))) {
+                System.out.println("✅ Listening for MAVLink messages on Port: " + port);
+                UdpInputStream udpInputStream = new UdpInputStream(udpSocket);
+                MavlinkConnection mavlinkConnection = MavlinkConnection.create(udpInputStream, null);
+                activePorts.add(port);
 
-            for (InetAddress zeroTierIP : zeroTierIPs) {
-                new Thread(() -> {
-                    try {
-                        DatagramSocket udpSocket = new DatagramSocket(new InetSocketAddress(zeroTierIP, port));
-                        System.out.println("✅ Listening for MAVLink messages on ZeroTier IP " + zeroTierIP + " Port: " + port);
-
-                        UdpInputStream udpInputStream = new UdpInputStream(udpSocket);
-                        MavlinkConnection mavlinkConnection = MavlinkConnection.create(udpInputStream, null);
-                        activePorts.add(port);
-
-                        while (true) {
-                            MavlinkMessage<?> message = mavlinkConnection.next();
-                            if (message != null) {
-                                InetAddress senderAddress = udpInputStream.getSenderAddress();
-                                int senderPort = udpInputStream.getSenderPort();
-                                handleUdpMavlinkMessage(message, port, udpSocket, senderAddress, senderPort);
-                            }
-                        }
-                    } catch (Exception e) {
-                        activePorts.remove(port);
-                        portToAddressMap.remove(port);
-                        System.err.println("❌ Error in UDP Listener (Port " + port + ", IP " + zeroTierIP + "): " + e.getMessage());
-                    }
-                }).start();
-            }
-        } catch (Exception e) {
-            System.err.println("❌ Failed to start UDP listener: " + e.getMessage());
-        }
-    }
-
-    private List<InetAddress> getZeroTierIPs() {
-        List<InetAddress> zeroTierIPs = new ArrayList<>();
-        try {
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            while (interfaces.hasMoreElements()) {
-                NetworkInterface networkInterface = interfaces.nextElement();
-                // Look for ZeroTier Interfaces (name contains "zt")
-                if (networkInterface.getName().contains("zt")) {
-                    Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
-                    while (addresses.hasMoreElements()) {
-                        InetAddress addr = addresses.nextElement();
-                        if (addr instanceof Inet4Address) {
-                            zeroTierIPs.add(addr);  // Add all IPv4 addresses found
-                        }
+                while (isRunning) {
+                    MavlinkMessage<?> message = mavlinkConnection.next();
+                    if (message != null) {
+                        InetAddress senderAddress = udpInputStream.getSenderAddress();
+                        int senderPort = udpInputStream.getSenderPort();
+                        handleUdpMavlinkMessage(message, port, udpSocket, senderAddress, senderPort);
                     }
                 }
             }
-        } catch (SocketException e) {
-            System.err.println("❌ Error getting ZeroTier IPs: " + e.getMessage());
+        } catch (Exception e) {
+            activePorts.remove(port);
+            portToAddressMap.remove(port);
+            System.err.println("❌ Error in UDP Listener (Port " + port + "): " + e.getMessage());
         }
-        return zeroTierIPs;
     }
 
-
     private void handleUdpMavlinkMessage(MavlinkMessage<?> message, int port, DatagramSocket udpSocket, InetAddress senderAddress, int senderPort) {
-
         LinkedHashMap<String, Object> telemetryData = telemetryUdpDataMap.get(port);
         telemetryData.put("GCS_IP", senderAddress.getHostAddress());
         telemetryData.put("systemid", message.getOriginSystemId());
-        // ✅ Update timestamp dynamically whenever a new message is received
         telemetryData.put("timestamp", getCurrentTimestamp());
 
-        // ✅ Mark this drone as "recently active"
         lastTelemetryUpdate.put(port, System.currentTimeMillis());
-
-        // ✅ If it was previously removed due to timeout, restore it
         if (!activePorts.contains(port)) {
             System.out.println("🔄 Drone on port " + port + " reconnected!");
             activePorts.add(port);
@@ -168,48 +126,30 @@ public class MavlinkClient {
         if (message.getPayload() instanceof MissionCount missionCount) {
             System.out.println("✅ Received MISSION_COUNT via (" + senderAddress + " / " + port + ") = " + missionCount.count());
             totalMissionItems.put(port, missionCount.count());
-
-            // ✅ Store waypoints per GCS_IP + Port
-            String gcsIp = senderAddress.getHostAddress();
             waypointsPerPort.put(port, new ArrayList<>());
-
             requestMissionItemsUdp(senderAddress, senderPort, port, udpSocket);
         }
 
         if (message.getPayload() instanceof MissionItemInt missionItemInt) {
-            saveMissionItem(port, missionItemInt);  // ✅ Store waypoint
-
+            saveMissionItem(port, missionItemInt);
             System.out.println("✅ [UdpPort " + port + "] Received Mission Item: Seq " + missionItemInt.seq() +
                     " (Lat: " + missionItemInt.x() + ", Lon: " + missionItemInt.y() + ", Alt: " + missionItemInt.z() + ")");
 
-            // ✅ Ensure all waypoints are received before sending
-            if (waypointsPerPort.get(port).size() == totalMissionItems.getOrDefault(port, 0)) {
+            int expectedCount = totalMissionItems.getOrDefault(port, 0);
+            List<Map<String, Object>> waypoints = waypointsPerPort.get(port);
+            if (waypoints.size() == expectedCount || (expectedCount > 0 && waypoints.size() > 0 && System.currentTimeMillis() - lastTelemetryUpdate.get(port) > 2000)) {
                 sendAllWaypoints(port);
             }
         }
-
-
-
-//        if (message.getPayload() instanceof MissionCount missionCount) {
-//            System.out.println("✅ Received MISSION_COUNT via ( " + senderAddress + " / " + port + ") =  " + missionCount.count());
-//            totalMissionItems.put(port, missionCount.count());
-//            requestMissionItemsUdp(senderAddress, senderPort, port, udpSocket);
-//        }
-//
-//        if (message.getPayload() instanceof MissionItemInt missionItemInt) {
-//            saveMissionItem(port, missionItemInt);  // ✅ Store waypoint
-//            System.out.println("✅ [UdpPort " + port + "] Received Mission Item: Seq " + missionItemInt.seq() +
-//                    " (Lat: " + missionItemInt.x() + ", Lon: " + missionItemInt.y() + ", Alt: " + missionItemInt.z() + ")");
-//        }
 
         if (message.getPayload() instanceof GlobalPositionInt globalPositionInt) {
             double currentLat = globalPositionInt.lat() / 1e7;
             double currentLon = globalPositionInt.lon() / 1e7;
             double currentAlt = globalPositionInt.relativeAlt() / 1000.0;
 
-            // ✅ Get home location for this drone (default to 0 if not set)
-            double homeLat = homeLocations.getOrDefault(port, Map.of("lat", 0.0, "lon", 0.0)).get("lat");
-            double homeLon = homeLocations.getOrDefault(port, Map.of("lat", 0.0, "lon", 0.0)).get("lon");
+            Map<String, Double> homeLocation = homeLocations.getOrDefault(port, Map.of("lat", 0.0, "lon", 0.0));
+            double homeLat = homeLocation.get("lat");
+            double homeLon = homeLocation.get("lon");
 
             double distToHome = calculateDistance(currentLat, currentLon, homeLat, homeLon) * 1000.00;
             telemetryData.put("dist_to_home", distToHome);
@@ -220,9 +160,8 @@ public class MavlinkClient {
             telemetryData.put("airspeed", vfrHud.airspeed());
             telemetryData.put("ground_speed", vfrHud.groundspeed());
             telemetryData.put("vertical_speed", vfrHud.climb());
-        } else if (message.getPayload() instanceof  NavControllerOutput navControllerOutput) {
+        } else if (message.getPayload() instanceof NavControllerOutput navControllerOutput) {
             telemetryData.put("wp_dist", navControllerOutput.wpDist());
-
         } else if (message.getPayload() instanceof Attitude attitude) {
             telemetryData.put("roll", String.format("%.2f", Math.toDegrees(attitude.roll())));
             telemetryData.put("pitch", String.format("%.2f", Math.toDegrees(attitude.pitch())));
@@ -239,33 +178,25 @@ public class MavlinkClient {
             telemetryData.put("ch12out", servoOutputRaw.servo12Raw());
         } else if (message.getPayload() instanceof Wind wind) {
             telemetryData.put("wind_vel", wind.speed());
-
-        }
-        else if (message.getPayload() instanceof GpsRawInt gpsRawInt) {
+        } else if (message.getPayload() instanceof GpsRawInt gpsRawInt) {
             telemetryData.put("gps_hdop", gpsRawInt.eph() / 100.0);
         }
-
 
         if (!requestedMissionList.get(port)) {
             requestMissionListUdp(senderAddress, senderPort, port, udpSocket);
             requestedMissionList.put(port, true);
         }
-
-
     }
 
     private void sendAllWaypoints(int port) {
         List<Map<String, Object>> waypoints = waypointsPerPort.get(port);
         if (waypoints == null || waypoints.isEmpty()) return;
 
-
-
         Map<String, Object> missionData = new LinkedHashMap<>();
         missionData.put("GCS_IP", telemetryUdpDataMap.get(port).get("GCS_IP"));
         missionData.put("udp_port", port);
         missionData.put("waypoints", waypoints);
 
-        // ✅ Send all waypoints at once via WebSocket
         TelemetryWebSocketHandler.sendMissionData(Collections.singletonList(missionData));
     }
 
@@ -276,20 +207,17 @@ public class MavlinkClient {
         waypoint.put("lon", missionItemInt.y() / 1e7);
         waypoint.put("alt", missionItemInt.z());
 
-        waypointsPerPort.get(port).add(waypoint); // ✅ Add waypoint to list for this port
+        waypointsPerPort.get(port).add(waypoint);
 
-        // ✅ Set home location per drone if it's the first waypoint (seq 0)
         if (missionItemInt.seq() == 0) {
             Map<String, Double> homeLocation = new HashMap<>();
             homeLocation.put("lat", missionItemInt.x() / 1e7);
             homeLocation.put("lon", missionItemInt.y() / 1e7);
             homeLocations.put(port, homeLocation);
-
             System.out.println("🏠 Home location set for Port " + port + ": Lat = " +
                     homeLocation.get("lat") + ", Lon = " + homeLocation.get("lon"));
         }
     }
-
 
     private void requestMissionListUdp(InetAddress address, int port, int udpPort, DatagramSocket udpSocket) {
         try {
@@ -321,24 +249,21 @@ public class MavlinkClient {
         }
     }
 
-
     private void printTelemetryData() {
-        if (activePorts.isEmpty()) {
-            System.out.println("❌ No active MAVLink connections.");
+        if (activePorts.isEmpty() || telemetryUdpDataMap.isEmpty()) {
+            System.out.println("❌ No active MAVLink connections or telemetry data.");
             return;
         }
 
         List<String> telemetryKeys = new ArrayList<>(telemetryUdpDataMap.values().iterator().next().keySet());
 
-        // Print Header Row
         System.out.printf("%-25s", "Telemetry Data");
         for (int port : activePorts) {
-          //  System.out.printf("| %-15s ", "Port " + port);
+            System.out.printf("| %-15s ", "Port " + port);
         }
-       // System.out.println();
-       // System.out.println("--------------------------------------------------------------------------------------");
+        System.out.println();
+        System.out.println("--------------------------------------------------------------------------------------");
 
-        // Print Each Row (Hide inactive ports)
         for (String key : telemetryKeys) {
             boolean hasNonNullValue = false;
             for (int port : activePorts) {
@@ -349,15 +274,15 @@ public class MavlinkClient {
                 }
             }
             if (hasNonNullValue) {
-              //  System.out.printf("%-25s", key);
+                System.out.printf("%-25s", key);
                 for (int port : activePorts) {
                     Object value = telemetryUdpDataMap.get(port).getOrDefault(key, "N/A");
-                   // System.out.printf("| %-15s ", value);
+                    System.out.printf("| %-15s ", value);
                 }
-              // System.out.println();
+                System.out.println();
             }
         }
-       // System.out.println("======================================================================================");
+        System.out.println("======================================================================================");
     }
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -368,26 +293,17 @@ public class MavlinkClient {
                 Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
                         Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c; // returns the distance in km
+        return R * c; // returns distance in km
     }
-
 
     private void createLogFile(int port) {
         File logDir = new File("logs");
         if (!logDir.exists()) logDir.mkdir();
-
-//        File logFile = new File(logDir, "telemetry_" + port + ".log");
-//        try {
-//            if (logFile.createNewFile()) {
-//                System.out.println("✅ Log file created: " + logFile.getAbsolutePath());
-//            }
-//        } catch (IOException e) {
-//            System.err.println("❌ Error creating log file for port " + port + ": " + e.getMessage());
-//        }
     }
-    private String fixedTimestamp=null;
+
+    private String fixedTimestamp = null;
+
     private void logTelemetryData(int port, Map<String, Object> telemetryData) {
-        // Assign timestamp only the first time function is called
         if (fixedTimestamp == null) {
             fixedTimestamp = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss").format(new Date());
         }
@@ -395,51 +311,55 @@ public class MavlinkClient {
         String gcsIP = telemetryData.getOrDefault("GCS_IP", "UNKNOWN").toString();
         String systemID = telemetryData.getOrDefault("systemid", "UNKNOWN").toString();
 
-        // Correct file name format: Received_20250303_131709_GCSIP_192.168.0.108_SYSID_1_t.log
-        File logFile = new File("logs/Received_" + fixedTimestamp + "_GCSIP_" + gcsIP +"_PORT_" + port +"_SYSID_" + systemID + "_t.log");
+        File logFile = new File("logs/Received_" + fixedTimestamp + "_GCSIP_" + gcsIP + "_PORT_" + port + "_SYSID_" + systemID + "_t.log");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true))) {
             writer.write("[" + getCurrentTimestamp() + "] " + telemetryData);
             writer.newLine();
-            writer.flush(); // ✅ Ensures real-time logging
+            writer.flush();
         } catch (IOException e) {
             System.err.println("❌ Error writing to log file for port " + port + ": " + e.getMessage());
         }
     }
 
     private void printAndLogTelemetryData() {
-        while (isPrintingActive) {
+        while (isRunning && isPrintingActive) {
             try {
-                Thread.sleep(1000); // ✅ Send every second
-
+                Thread.sleep(1000);
+                long now = System.currentTimeMillis();
                 List<Map<String, Object>> telemetryList = new ArrayList<>();
 
-                for (int port : activePorts) {
+                Iterator<Integer> portIterator = activePorts.iterator();
+                while (portIterator.hasNext()) {
+                    int port = portIterator.next();
+                    Long lastUpdate = lastTelemetryUpdate.get(port);
+                    if (lastUpdate != null && (now - lastUpdate) > TELEMETRY_TIMEOUT_MS) {
+                        System.out.println("❌ Drone on port " + port + " timed out.");
+                        portIterator.remove();
+                        continue;
+                    }
+
                     Map<String, Object> telemetryData = telemetryUdpDataMap.get(port);
-                    if (!"Unknown".equals(telemetryData.get("GCS_IP"))) {// ✅ Only send active drones
-                        logTelemetryData(port, telemetryData); // ✅ Save to log
+                    if (!"Unknown".equals(telemetryData.get("GCS_IP"))) {
+                        logTelemetryData(port, telemetryData);
 
-                        // ✅ Add waypoints to telemetry data
                         List<Map<String, Object>> waypoints = waypointsPerPort.getOrDefault(port, new ArrayList<>());
-
                         telemetryData.put("waypoints", waypoints);
 
-                        // ✅ Get the home location for this drone (default to 0 if not set)
                         Map<String, Double> homeLocation = homeLocations.getOrDefault(port, Map.of("lat", 0.0, "lon", 0.0));
                         telemetryData.put("home_location", homeLocation);
 
-
                         telemetryList.add(telemetryData);
                     }
-                    printTelemetryData();
                 }
 
                 if (!telemetryList.isEmpty()) {
                     Map<String, Object> payload = new HashMap<>();
                     payload.put("drones", telemetryList);
-                    TelemetryWebSocketHandler.sendTelemetryData(payload);  // ✅ Send telemetry with waypoints
+                    TelemetryWebSocketHandler.sendTelemetryData(payload);
                 }
 
+                printTelemetryData();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 System.err.println("❌ Printing thread interrupted.");
@@ -447,11 +367,22 @@ public class MavlinkClient {
         }
     }
 
-
-
-    // ✅ Function to get the current timestamp dynamically
     private String getCurrentTimestamp() {
         return timestampFormat.format(new Date());
+    }
+
+    public void shutdown() {
+        isRunning = false;
+        isPrintingActive = false;
+        executorService.shutdown();
+        try {
+            if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 
     private static class UdpInputStream extends InputStream {

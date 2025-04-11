@@ -10,4 +10,6 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
+COPY .env /app/.env
+RUN chmod 600 /app/.env
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -67,7 +67,7 @@ jobs:
               sudo chmod +x /usr/local/bin/docker-compose
             fi
 
-            # Install wget for downloading .env file
+            # Install wget for downloading .env files
             if ! command -v wget >/dev/null 2>&1; then
               echo "Installing wget..."
               sudo apt-get install -y wget
@@ -85,16 +85,27 @@ jobs:
               cd "$REPO_DIR"
             fi
 
-            # Download .env file from Google Drive
-            echo "Downloading .env file from Google Drive..."
-            FILE_ID="1XP9W7uCltzU8IC61I7nA9HDKRdom_Q7u"
-            wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID" -O Frontend/.env
+            # Download .env file for Frontend
+            echo "Downloadin g .env file for Frontend from Google Drive..."
+            FILE_ID_FRONTEND="1XP9W7uCltzU8IC61I7nA9HDKRdom_Q7u"
+            wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID_FRONTEND" -O Frontend/.env
             if [ ! -f "Frontend/.env" ]; then
               echo "Error: Failed to download Frontend/.env"
               exit 1
             fi
             chmod 600 Frontend/.env
             echo "Frontend/.env downloaded and permissions set"
+
+            # Download .env file for Backend
+            echo "Downloading .env file for Backend from Google Drive..."
+            FILE_ID_BACKEND="1mIrLok-BLhRtcW2JIxK5FyXpGl7gCawu"
+            wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID_BACKEND" -O Backend/.env
+            if [ ! -f "Backend/.env" ]; then
+              echo "Error: Failed to download Backend/.env"
+              exit 1
+            fi
+            chmod 600 Backend/.env
+            echo "Backend/.env downloaded and permissions set"
 
             # Create logs directory for backend
             mkdir -p Backend/logs
