@@ -12,14 +12,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build on EC2
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          EC2_INSTANCE_IP: ${{ secrets.EC2_INSTANCE_IP }}
+      - name: Set up SSH Key
         run: |
-          echo -e "$SSH_PRIVATE_KEY" > private_key.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | sed 's/\$/$$/g' > private_key.pem
           chmod 600 private_key.pem
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@$EC2_INSTANCE_IP << 'EOF'
+
+      - name: Build on EC2
+        run: |
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
+            set -x  # Enable debug mode for tracing
             echo "Connected to EC2 for Build"
 
             # Install Git
@@ -67,7 +68,7 @@ jobs:
               sudo chmod +x /usr/local/bin/docker-compose
             fi
 
-            # Install wget for downloading .env file
+            # Install wget for downloading .env files
             if ! command -v wget >/dev/null 2>&1; then
               echo "Installing wget..."
               sudo apt-get install -y wget
@@ -85,16 +86,28 @@ jobs:
               cd "$REPO_DIR"
             fi
 
-            # Download .env file from Google Drive
-            echo "Downloading .env file from Google Drive..."
-            FILE_ID="1XP9W7uCltzU8IC61I7nA9HDKRdom_Q7u"
-            wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID" -O Frontend/.env
+            # Download .env file for Frontend
+            echo "Downloading .env file for Frontend from Google Drive..."
+            FILE_ID_FRONTEND="1XP9W7uCltzU8IC61I7nA9HDKRdom_Q7u"
+            wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID_FRONTEND" -O Frontend/.env
             if [ ! -f "Frontend/.env" ]; then
               echo "Error: Failed to download Frontend/.env"
               exit 1
             fi
             chmod 600 Frontend/.env
             echo "Frontend/.env downloaded and permissions set"
+
+            # Download .env file for Backend
+            echo "Downloading .env file for Backend from Google Drive..."
+            FILE_ID_BACKEND="1mIrLok-BLhRtcW2JIxK5FyXpGl7gCawu"
+            mkdir -p Backend/src/main/resources
+            wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID_BACKEND" -O Backend/src/main/resources/.env
+            if [ ! -f "Backend/src/main/resources/.env" ]; then
+              echo "Error: Failed to download Backend/src/main/resources/.env"
+              exit 1
+            fi
+            chmod 600 Backend/src/main/resources/.env
+            echo "Backend/src/main/resources/.env downloaded and permissions set"
 
             # Create logs directory for backend
             mkdir -p Backend/logs
@@ -106,13 +119,13 @@ jobs:
               exit 1
             fi
 
-            # Build and tag images with version (no cache for fresh builds)
+            # Build and tag images with version
             COMMIT_SHA=$(git rev-parse --short HEAD) || { echo "Failed to get commit SHA"; exit 1; }
-            echo "Building services with tag: ${COMMIT_SHA}"
-            timeout 20m docker-compose build --no-cache --progress=plain || { echo "Build timed out or failed"; exit 1; }
-            docker tag code2mdt-frontend:latest frontend:${COMMIT_SHA}
-            docker tag code2mdt-backend:latest backend:${COMMIT_SHA}
-            docker tag code2mdt-backend1:latest backend1:${COMMIT_SHA}
+            echo "Building services with tag: $COMMIT_SHA"
+            timeout 30m docker-compose build --no-cache > build.log 2>&1 || { echo "Build timed out or failed"; cat build.log; exit 1; }
+            docker tag code2mdt-frontend:latest frontend:"$COMMIT_SHA"
+            docker tag code2mdt-backend:latest backend:"$COMMIT_SHA"
+            docker tag code2mdt-backend1:latest backend1:"$COMMIT_SHA"
           EOF
           rm -f private_key.pem
 
@@ -120,14 +133,14 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to EC2
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          EC2_INSTANCE_IP: ${{ secrets.EC2_INSTANCE_IP }}
+      - name: Set up SSH Key
         run: |
-          echo -e "$SSH_PRIVATE_KEY" > private_key.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | sed 's/\$/$$/g' > private_key.pem
           chmod 600 private_key.pem
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@$EC2_INSTANCE_IP << 'EOF'
+
+      - name: Deploy to EC2
+        run: |
+          ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
             echo "Connected to EC2 for Deploy"
 
             # Navigate to project directory
@@ -139,7 +152,7 @@ jobs:
 
             # Get current commit SHA
             COMMIT_SHA=$(git rev-parse --short HEAD) || { echo "Failed to get commit SHA"; exit 1; }
-            echo "Current commit SHA: ${COMMIT_SHA}"
+            echo "Current commit SHA: $COMMIT_SHA"
 
             # Deploy the new version
             echo "Deploying with latest tags..."
