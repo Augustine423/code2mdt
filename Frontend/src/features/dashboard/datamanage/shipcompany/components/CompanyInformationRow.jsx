@@ -4,6 +4,7 @@ import { Ellipsis, Trash2, Edit, Info } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { deleteCompany, fetchCompanies } from "../../../../../stores/informationData/companySlice";
+import companyImage from "../../../../../assets/informationdata/sajo logo.png";
 import { usePopup } from "../../../../../hooks/usePopup";
 import { useRef, useState } from "react";
 import { usePopupPosition } from "../../../../../hooks/usePopupPosition";
@@ -41,6 +42,7 @@ const CompanyInformationRow = ({ company:{id,name,logo,businessNo,country,repres
           <img 
             // src={company.coLogo} 
               src="/src/assets/informationdata/sajo logo.png"
+            src={ companyImage}
             alt={name} 
             className="w-[69px] h-auto object-contain" 
           />
