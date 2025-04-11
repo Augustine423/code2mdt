@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Camera, Upload } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import companyImage from "../../../../../assets/informationdata/sajo logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
   updateCompany,
@@ -83,7 +84,7 @@ const CompanyEditForm = () => {
                   <div className="w-[280px] h-[150px] bg-gray-100 rounded-md flex items-center justify-center">
               <img
                 // src={currentCompany.coLogo}
-                src="/src/assets/informationdata/sajo logo.png"
+                src={companyImage}
                 alt={currentCompany.name}
                 className="max-w-full max-h-full object-contain"
               />
