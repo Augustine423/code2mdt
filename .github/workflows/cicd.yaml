@@ -14,10 +14,12 @@ jobs:
 
       - name: Build on EC2
         env:
+          # Escape $ in SSH_PRIVATE_KEY by doubling them
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           EC2_INSTANCE_IP: ${{ secrets.EC2_INSTANCE_IP }}
         run: |
-          echo -e "$SSH_PRIVATE_KEY" > private_key.pem
+          # Write SSH key to file, escaping $ characters
+          echo "$SSH_PRIVATE_KEY" | sed 's/\$/$$/g' > private_key.pem
           chmod 600 private_key.pem
           ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@$EC2_INSTANCE_IP << 'EOF'
             echo "Connected to EC2 for Build"
@@ -117,10 +119,10 @@ jobs:
               exit 1
             fi
 
-            # Build and tag images with version (no cache for fresh builds)
+            # Build and tag images with version (updated syntax)
             COMMIT_SHA=$(git rev-parse --short HEAD) || { echo "Failed to get commit SHA"; exit 1; }
             echo "Building services with tag: ${COMMIT_SHA}"
-            timeout 20m docker-compose build --no-cache --progress=plain || { echo "Build timed out or failed"; exit 1; }
+            timeout 20m docker-compose --progress plain build --no-cache || { echo "Build timed out or failed"; exit 1; }
             docker tag code2mdt-frontend:latest frontend:${COMMIT_SHA}
             docker tag code2mdt-backend:latest backend:${COMMIT_SHA}
             docker tag code2mdt-backend1:latest backend1:${COMMIT_SHA}
@@ -136,7 +138,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           EC2_INSTANCE_IP: ${{ secrets.EC2_INSTANCE_IP }}
         run: |
-          echo -e "$SSH_PRIVATE_KEY" > private_key.pem
+          echo "$SSH_PRIVATE_KEY" | sed 's/\$/$$/g' > private_key.pem
           chmod 600 private_key.pem
           ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@$EC2_INSTANCE_IP << 'EOF'
             echo "Connected to EC2 for Deploy"
