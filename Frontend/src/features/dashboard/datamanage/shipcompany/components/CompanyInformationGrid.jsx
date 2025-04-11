@@ -21,7 +21,7 @@ const CompanyInformationGrid = () => {
  const [currentPage, setCurrentPage] = useState(1); // Default to page 1
 
   useEffect(() => {
-    dispatch(fetchCompanies({  page:currentPage - 1, size: 10 }));
+    dispatch(fetchCompanies({  page:currentPage - 1, size: 12 }));
   }, [dispatch ,currentPage]);// Fetch on page change
 
   // const handlePageChange = (newPage) => {
@@ -35,7 +35,7 @@ const CompanyInformationGrid = () => {
     if (!companyId) return;
     try {
       await dispatch(deleteCompany(companyId)).unwrap();
-      dispatch(fetchCompanies({ page, size: 10}));
+      dispatch(fetchCompanies({ page, size: 12}));
     } catch (error) {
       console.error("Error while deleting company:", error);
     }
