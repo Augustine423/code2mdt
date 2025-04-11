@@ -1600,35 +1600,35 @@
   {
     "id": "1",
     "name": "박의정",
-    "image": "/src/assets/mechanicData/mechanic1.jpg",
+    "image": "http://52.79.57.3/assets/mechanicData/mechanic1.jpg",
     "mechanic": "John Doe",
     "employee_no": "2402_03",
     "email": "ejpark@marine-drone.co.kr",
     "position": "Deputy Manager",
     "ph_number": "010-4578-4752",
-    "sign": "/src/assets/mechanicData/mechanicSign1.jpg"
+    "sign": "http://52.79.57.3/assets/mechanicData/mechanicSign1.jpg"
   },
   {
     "id": "2",
-    "name": "Jane Smith",
-    "image": "/src/assets/mechanicData/mechanic2.jpg",
+    "name": "이대현",
+    "image": "http://52.79.57.3/assets/mechanicData/mechanic2.jpg",
     "mechanic": "Jane Smith",
     "employee_no": "2407_07",
     "email": "alroid@marine-drone.co.kr",
     "position": "Junior Mechanic",
     "ph_number": "010-8481-2486",
-   "sign": "/src/assets/mechanicData/mechanicSign2.jpg"
+   "sign": "http://52.79.57.3/assets/mechanicData/mechanicSign2.jpg"
   },
   {
     "id": "3",
-    "name": "Robert Brown",
-    "image": "/src/assets/mechanicData/mechanic3.jpg",
+    "name": "김우성",
+    "image": "http://52.79.57.3/assets/mechanicData/mechanic3.jpg",
     "mechanic": "Robert Brown",
     "employee_no": "2411_02",
     "email": "kws@marine-drone.co.kr",
     "position": "Lead Mechanic",
     "ph_number": "010-9505-5902",
-   "sign": "/src/assets/mechanicData/mechanicSign3.jpg"
+   "sign": "http://52.79.57.3/assets/mechanicData/mechanicSign3.jpg"
   }
 ]
 
