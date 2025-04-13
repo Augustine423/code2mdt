@@ -191,7 +191,7 @@ const [videoView, setVideoView] = useState(false);
   const droneDataStatic = [
     {
       "Model": "MDT-V290",
-      "Serial No": "name",
+      "Serial No": "MDT290I24060801",
       Latitude: lat,
       Longitude: lon,
       Altitude: altt+" M",
@@ -225,7 +225,7 @@ const [videoView, setVideoView] = useState(false);
       </div>
 
       {shipDetails && (
-        <div className="absolute top-[60px] left-7 w-1/5 h-6/6 bg-white z-40 flex flex-col rounded-md shadow-md ">
+        <div className="absolute top-[60px] left-7 w-3/12 h-6/6 bg-white z-40 flex flex-col rounded-md shadow-md">
           {/* Ship Name */}
           <div className="w-full pt-1 pb-1 pl-3 pr-3 flex justify-between items-center bg-transparent shadow-md">
             <span className="font-semibold">Serena ver.2</span>
@@ -269,7 +269,7 @@ const [videoView, setVideoView] = useState(false);
               {Object.entries(drone).map(([key, value]) => (
                 <div className="w-1/2 flex flex-col mb-2" key={key}>
                   <div className="w-full flex items-center text-[12px] text-gray-500">{key}</div>
-                  <div className="w-full flex items-center font-semibold">{value}</div>
+                  <div className="w-full flex items-center font-semibold text-primary">{value}</div>
                 </div>
               ))}
             </div>
@@ -288,7 +288,7 @@ const [videoView, setVideoView] = useState(false);
           </div>
 
           {/* Pilot Info */}
-          <div className="w-full flex pt-1 pb-1 pl-3 flex-col">
+          <div className="w-full flex pt-1 pb-0 pl-3 flex-col">
             <div className="w-full flex items-end justify-start gap-1">
               <div className="flex justify-center items-center text-[16px] text-center font-semibold">Pilot Info</div>
             </div>
@@ -370,11 +370,9 @@ const [videoView, setVideoView] = useState(false);
                   <Popup>
                     <div>
                       <strong>Drone id:</strong> VT00{drone.systemid} / {drone.systemid} <br />
+                      <strong>Latitude:</strong> {drone.lat} N<br />
+                      <strong>Longitude:</strong> {drone.lon} E<br />
                       <strong>Altitude(m):</strong> {drone.alt} m <br />
-                      <strong>Time in air (m.s)</strong> {drone.time_in_air} m.s <br />
-                      <strong>Airspeed (m/s):</strong> {drone.airspeed} m/s <br />
-                      <strong>Groundspeed (m/s):</strong> {drone.ground_speed} m/s <br />
-                      <strong>Battery (V):</strong> {drone.battery_voltage} V
                     </div>
                   </Popup>
                 </Marker>
