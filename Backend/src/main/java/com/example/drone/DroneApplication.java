@@ -1,6 +1,7 @@
 package com.example.drone;
 
 import com.example.drone.client.MavlinkClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DroneApplication implements CommandLineRunner {
 
 
+	@Autowired
 	private final MavlinkClient mavlinkClient;
 
     public DroneApplication(MavlinkClient mavlinkClient) {

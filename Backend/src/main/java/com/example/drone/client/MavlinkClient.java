@@ -1,5 +1,6 @@
 package com.example.drone.client;
 
+import com.example.drone.config.TelemetryS3AppenderV1;
 import com.example.drone.config.TelemetryWebSocketHandler;
 import io.dronefleet.mavlink.MavlinkConnection;
 import io.dronefleet.mavlink.MavlinkMessage;
@@ -12,6 +13,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -33,11 +37,14 @@ public class MavlinkClient {
     // ✅ Date formatter for dynamic timestamps
     private final SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    @Autowired
+    private TelemetryS3AppenderV1 telemetryS3AppenderV1;
+
     public MavlinkClient() {
         for (int port : udpPorts) {
             telemetryUdpDataMap.put(port, initializeTelemetryData());
             waypointsPerPort.put(port, new ArrayList<>()); // ✅ Initialize waypoint list
-            createLogFile(port);
+          //  createLogFile(port);
 
         }
     }
@@ -333,10 +340,10 @@ public class MavlinkClient {
         // Print Header Row
         System.out.printf("%-25s", "Telemetry Data");
         for (int port : activePorts) {
-          //  System.out.printf("| %-15s ", "Port " + port);
+            System.out.printf("| %-15s ", "Port " + port);
         }
-       // System.out.println();
-       // System.out.println("--------------------------------------------------------------------------------------");
+        System.out.println();
+        System.out.println("--------------------------------------------------------------------------------------");
 
         // Print Each Row (Hide inactive ports)
         for (String key : telemetryKeys) {
@@ -349,15 +356,15 @@ public class MavlinkClient {
                 }
             }
             if (hasNonNullValue) {
-              //  System.out.printf("%-25s", key);
+                System.out.printf("%-25s", key);
                 for (int port : activePorts) {
                     Object value = telemetryUdpDataMap.get(port).getOrDefault(key, "N/A");
-                   // System.out.printf("| %-15s ", value);
+                    System.out.printf("| %-15s ", value);
                 }
-              // System.out.println();
+               System.out.println();
             }
         }
-       // System.out.println("======================================================================================");
+        System.out.println("======================================================================================");
     }
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -417,7 +424,7 @@ public class MavlinkClient {
                 for (int port : activePorts) {
                     Map<String, Object> telemetryData = telemetryUdpDataMap.get(port);
                     if (!"Unknown".equals(telemetryData.get("GCS_IP"))) {// ✅ Only send active drones
-                        logTelemetryData(port, telemetryData); // ✅ Save to log
+                      //  logTelemetryData(port, telemetryData); // ✅ Save to log
 
                         // ✅ Add waypoints to telemetry data
                         List<Map<String, Object>> waypoints = waypointsPerPort.getOrDefault(port, new ArrayList<>());
@@ -430,6 +437,16 @@ public class MavlinkClient {
 
 
                         telemetryList.add(telemetryData);
+                        // ✅ Extract GCS_IP and SYS_ID for S3 logging
+                        if(telemetryData.get("systemid") != null && !"UNKNOWN".equals(telemetryData.get("systemid"))) {
+                            String gcsIp = (String) telemetryData.get("GCS_IP");
+                            String sysId =  telemetryData.getOrDefault("systemid", "UNKNOWN").toString();
+
+                            // ✅ Track the flight start time per drone (if you haven't already)
+
+                            // ✅ Call S3 appender before WebSocket sending
+                            telemetryS3AppenderV1.appendToS3Log(telemetryList, gcsIp, sysId);
+                        }
                     }
                     printTelemetryData();
                 }
