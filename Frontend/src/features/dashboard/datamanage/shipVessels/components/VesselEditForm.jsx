@@ -235,15 +235,15 @@ const VesselEditForm = () => {
                   <div className="flex-1">
                     <input
                       type="text"
-                      {...register("imoNo", {
+                      {...register("imo", {
                         required: "Vessel IMO No is required",
                       })}
                       placeholder="Please Enter"
                       className="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
-                    {errors.imoNo && (
+                    {errors.imo && (
                       <p className="text-red-500 text-sm mt-1">
-                        {errors.imoNo.message}
+                        {errors.imo.message}
                       </p>
                     )}
                   </div>

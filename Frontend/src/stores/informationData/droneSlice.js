@@ -167,6 +167,7 @@ export const fetchDroneInfos = createAsyncThunk(
   }
 );
 
+
 const droneSlice = createSlice({
   name: "drones",
   initialState: {

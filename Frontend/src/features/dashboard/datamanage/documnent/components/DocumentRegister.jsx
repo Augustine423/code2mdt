@@ -1,5 +1,4 @@
 
-
 const DocumentRegister = () => {
   return (
     <div>DocumentRegister</div>

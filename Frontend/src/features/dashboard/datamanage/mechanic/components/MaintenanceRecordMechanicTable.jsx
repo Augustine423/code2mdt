@@ -27,7 +27,12 @@ const MaintenanceRecordMechanicTable = () => {
                 No vessels found
               </td>
             </tr>
-          )} */}text
+          )} */}
+            <tr>
+                <td colSpan="6" className="text-center py-4 text-gray-500">
+                  No mechanic found
+                </td>
+              </tr>
         </tbody>
       </table>
     </div>

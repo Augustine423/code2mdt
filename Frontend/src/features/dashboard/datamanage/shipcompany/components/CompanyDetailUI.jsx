@@ -5,6 +5,8 @@ import { fetchCompanyById } from "../../../../../stores/informationData/companyS
 import { useEffect, useState } from "react";
 import VesselDetailTableUI from "./VesselDetailTableUI";
 import { fetchVesselsByCompanyId } from "../../../../../stores/informationData/vesselSlice";
+import companyImage from "../../../../../assets/informationdata/sajo logo.png";
+
 
 const CompanyDetailUI = () => {
 
@@ -52,7 +54,7 @@ const CompanyDetailUI = () => {
             <div className="w-[280px] h-[150px] bg-gray-100 rounded-md flex items-center justify-center">
               <img
                 // src={currentCompany.coLogo}
-                src="/src/assets/informationdata/sajo logo.png"
+                src={companyImage}
                 alt={currentCompany.name}
                 className="max-w-full max-h-full object-contain"
               />

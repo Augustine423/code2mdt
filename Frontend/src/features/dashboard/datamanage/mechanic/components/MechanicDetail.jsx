@@ -7,7 +7,8 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 // import { fetchVesselsByCompanyId } from "../../../../../stores/informationData/vesselSlice";
 import MaintenanceRecordMechanicTable from "./MaintenanceRecordMechanicTable";
-// import { fetchMechanicById } from "../../../../../stores/informationData/mechanicSlice";
+import { fetchMechanicInfoById } from "../../../../../stores/informationData/mechanicInfoSlice";
+
 
 const MechanicDetail = () => {
   const { id } = useParams();
@@ -16,14 +17,15 @@ const MechanicDetail = () => {
 
   // Fetch company details when the component mounts
   useEffect(() => {
-    // dispatch(fetchMechanicById(id));
+    dispatch(fetchMechanicInfoById(id));
   }, [dispatch, id]);
 
   // Access the fetched company details from the Redux store
-  const currentMechanic = useSelector((state) => state.mechanics.currentMechanic);
+  const currentMechanic = useSelector((state) => state.mechanics?.currentMechanic);
+  console.log(currentMechanic);
 
-  const loading = useSelector((state) => state.mechanics.loading);
-  const error = useSelector((state) => state.mechanics.error);
+  const loading = useSelector((state) => state.mechanics?.loading);
+  const error = useSelector((state) => state.mechanics?.error);
 
   // Display loading or error states
   if (loading) {
@@ -49,15 +51,17 @@ const MechanicDetail = () => {
 
         <div className="grid grid-cols-3 gap-x-6 gap-y-4">
   {/* Mechanic Image */}
-  <div className="col-span-1 flex items-center">
-    <div className="w-[280px] h-[150px] bg-gray-100 rounded-md flex items-center justify-center">
-      <img
-        src={currentMechanic.mechanicImg}
-        alt={currentMechanic.mechanicName}
-        className="max-w-full max-h-full object-contain"
-      />
-    </div>
+  <div className="col-span-1 flex items-center justify-center">
+  <div className="w-[280px] h-[150px] rounded-xl overflow-hidden shadow-lg duration-300 hover:scale-105 hover:shadow-xl bg-white flex items-center justify-center">
+    <img
+      src={currentMechanic.image}
+      alt={currentMechanic.name}
+      className="object-cover"
+    />
   </div>
+</div>
+
+
 
   {/* Mechanic Details */}
   <div className="col-span-2 grid grid-cols-2 gap-x-8 gap-y-4 border-b border-gray-300">
@@ -67,11 +71,11 @@ const MechanicDetail = () => {
       <div className="flex gap-10 w-full">
         <div className="flex-1 flex justify-between">
           <span className="text-sm font-medium">Mechanic</span>
-          <span className="text-sm text-gray-600">{currentMechanic.mechanicName}</span>
+          <span className="text-sm text-gray-600">{currentMechanic.name}</span>
         </div>
         <div className="flex-1 flex justify-between">
           <span className="text-sm font-medium">Employee No</span>
-          <span className="text-sm text-gray-600">{currentMechanic.mechanicId}</span>
+          <span className="text-sm text-gray-600">{currentMechanic.employee_no}</span>
         </div>
       </div>
     </div>
@@ -81,11 +85,11 @@ const MechanicDetail = () => {
       <div className="flex gap-10 w-full">
         <div className="flex-1 flex justify-between">
           <span className="text-sm font-medium">Position</span>
-          <span className="text-sm text-gray-600">{currentMechanic.mechanicPosition}</span>
+          <span className="text-sm text-gray-600">{currentMechanic.position}</span>
         </div>
         <div className="flex-1 flex justify-between">
         <span className="text-sm font-medium">E-mail</span>
-        <span className="text-sm text-gray-600">{currentMechanic.mechanicEmail}</span>
+        <span className="text-sm text-gray-600">{currentMechanic.email}</span>
         </div>
       </div>
     </div>
@@ -95,11 +99,18 @@ const MechanicDetail = () => {
       <div className="flex gap-10 w-full">
         <div className="flex-1 flex justify-between">
         <span className="text-sm font-medium">Phone No</span>
-        <span className="text-sm text-gray-600">{currentMechanic.mechanicPhone}</span>
+        <span className="text-sm text-gray-600">{currentMechanic.ph_number}</span>
         </div>
         <div className="flex-1 flex justify-between">
         <span className="text-sm font-medium">Sign</span>
-      <span className="text-sm text-gray-600">{currentMechanic.mechanicSign}</span>
+      {/* <span className="text-sm text-gray-600">{currentMechanic.sign}</span> */}
+      <div className=" rounded-xl overflow-hidden  duration-300 hover:scale-105 hover:shadow-xl bg-white flex items-center justify-center">
+    <img
+      src={currentMechanic.sign}
+      alt={currentMechanic.name}
+      className="object-content text-base w-20"
+    />
+  </div>
         </div>
       </div>
     </div>

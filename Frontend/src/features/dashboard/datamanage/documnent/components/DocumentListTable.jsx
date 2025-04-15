@@ -1,43 +1,37 @@
 
-import NotFound from "../../../../../components/NotFound";
-import PageLoading from "../../../../../components/PageLoading";
-import Pagination from "../../../../../components/Pagination";
+
+import { useEffect } from "react";
+import PaginationMechanic from "../../../../../components/PaginationMechanic";
 import DocumentListRow from "./DocumentListRow";
 // import PageLoading from "../../../../../components/PageLoading";
 // import NotFound from "../../../../../components/NotFound";
-// import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDocuments } from "../../../../../stores/informationData/documentSlice";
+
 
 
 const DocumentListTable = () => {
-  // const { vessels, loading, error } = useSelector(
-  //   (state) => state.vessels || {}
-  // );
-
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error: {error}</p>;
+  const dispatch=useDispatch();
+  
+  const {documents} = useSelector(
+    (state) => state.documents || {}
+  );
+  console.log("this is documents",documents)
+  
+  useEffect(() => {
+    dispatch(fetchDocuments());
+  }, [dispatch]);
+  
+    
+    
   
 
-  const documentData=[
-    {
-      id: 1,
-      no: 1,
-      documentName: "Document 1",
-      author: "John Doe",
-      date: "2023-05-01",
-    },
-    {
-      id: 2,
-      no: 2,
-      documentName: "Document 2",
-      author: "Jane Smith",
-      date: "2023-05-02",
-    },
-  ]
+
 
   return (
     <>
-      <div className=" shadow-xl rounded-md w-full py-8">
-        <div id="printArea" className="overflow-x-auto bg-white border rounded-md">
+     <div className="bg-white rounded-lg shadow-md px-6  md:p-8 h-full xl:mb-10 w-full ">
+        <div id="printArea" className="overflow-x-auto bg-white  rounded-md">
           <table className="w-full">
             <thead className="bg-gray-50 m-4">
               <tr className=" bg-gray-200 p-6 mx-4">
@@ -64,7 +58,7 @@ const DocumentListTable = () => {
                 <NotFound />
               ) : ( */}
               {
-                documentData.map((document) => (
+                documents.map((document) => (
                   <DocumentListRow document={document} key={document.id} />
                 ))
               }
@@ -75,7 +69,7 @@ const DocumentListTable = () => {
 
       {/* Pagination Section */}
       <div className="mb-8">
-          <Pagination />
+          <PaginationMechanic />
         </div>
       </div>
     </>

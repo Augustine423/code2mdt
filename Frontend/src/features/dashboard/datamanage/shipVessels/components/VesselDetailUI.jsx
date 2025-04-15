@@ -103,7 +103,7 @@ const VesselDetailUI = () => {
             <div className="flex justify-between items-center border-b border-gray-300 pb-2 pr-4">
               <span className="text-sm font-medium">IMO No</span>
               <span className="text-sm text-gray-600">
-                {currentVessel.imoNo}
+                {currentVessel.imo}
               </span>
             </div>
 

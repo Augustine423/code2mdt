@@ -31,4 +31,5 @@ resolve: {
     host: '0.0.0.0', // Allow access from other devices on the network
     port: 3000, // You can specify any port, or leave it as default (3000)
   },
+  
 })

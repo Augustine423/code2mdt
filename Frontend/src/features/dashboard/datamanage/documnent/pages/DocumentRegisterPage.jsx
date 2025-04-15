@@ -1,8 +1,11 @@
-
+import DocumentRegisterHeader from "../../documnent/components/DocumentDetailHeader"
 
 const DocumentRegisterPage = () => {
   return (
-    <div>DocumentRegisterPage</div>
+    
+    <>
+    <DocumentRegisterHeader/>
+    </>
   )
 }
 

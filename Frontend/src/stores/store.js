@@ -15,6 +15,7 @@ import materialReducer from "../stores/informationData/materialSlice";
 import imageReducer from "../stores/informationData/imageGallerySlice";
 import flightLogReducer from "../stores/informationData/flightLogInfoSlice";
 import droneInfoReducer from "../stores/informationData/droneSlice";
+import documentReducer from "../stores/informationData/documentSlice";
 
 import storage from "redux-persist/lib/storage";
 
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
   materials: materialReducer,
   flightlogs:flightLogReducer,
   drones:droneInfoReducer,
+  documents:documentReducer,
   
   
 });

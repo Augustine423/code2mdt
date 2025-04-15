@@ -9,12 +9,13 @@ import { fetchMaterials } from "../../../../../stores/informationData/materialSl
 import MaterialListRow from "./MaterialListRow";
 
 const MaterialList = () => {
-  const [isChecked, setIsChecked] = useState();
 const dispatch=useDispatch();
 
 const { materials, loading, error } = useSelector(
   (state) => state.materials || {}
 );
+
+
 
 
 

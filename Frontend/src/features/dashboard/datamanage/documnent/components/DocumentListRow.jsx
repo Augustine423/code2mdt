@@ -14,7 +14,7 @@ const DocumentListRow = ({document}) => {
       
           {/* No */}
           <td className="px-6 py-4 text-sm text-gray-700 whitespace-nowrap">
-          {document.documentName}
+          {document.name}
           </td>
       
           {/* File Name */}

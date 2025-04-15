@@ -111,7 +111,7 @@ const MechanicGridView = () => {
     const { mechanics, loading, error } = useSelector(
       (state) => state.mechanics|| {}
     );
-    console.log("this is mechanic", mechanics);
+   
 
   useEffect(() => {
     dispatch(fetchMechanicInfo());
@@ -138,7 +138,7 @@ const MechanicGridView = () => {
         // }
       };
 
-  console.log("this is pilots", mechanics);
+
 
   return (
     <>
