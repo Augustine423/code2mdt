@@ -22,14 +22,14 @@ export const fetchDocumentById = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       // Make API request to fetch material by ID
-      const response = await axios.get(`http://52.79.57.3:3003/documents/${id}`);
+      const response = await axios.get(`http://localhost:3003/documents/${id}`);
       
       
 
       return response.data;  // Return the response data from the server
     } catch (error) {
       // In case of an error, return the error message
-      return rejectWithValue(error.response?.data || "Failed to fetch material");
+      return rejectWithValue(error.response?.data || "Failed to fetch Document");
     }
   }
 );
@@ -70,7 +70,7 @@ const documentSlice = createSlice({
       })
       .addCase(fetchDocumentById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to fetch company";
+        state.error = action.payload || "Failed to fetch document";
         state.currentDocument = null;  // In case of error, set currentDocument to null
       });
       
