@@ -1639,7 +1639,7 @@
       "name": "코드 내려받기#pull",
       "author": "김대희",
       "date": "2025-04-11",
-      "url":"/documentData/pdf1.pdf"
+      "url":"http://52.79.57.3/documentData/pdf1.pdf"
       
     },
     {
@@ -1648,7 +1648,7 @@
       "name": "git pull 옵션을 생략하기",
       "author": "김유성",
       "date": "2025-04-10",
-      "url":"/documentData/pdf2.pdf"
+      "url":"http://52.79.57.3/documentData/pdf2.pdf"
     
     },
     {
@@ -1657,7 +1657,7 @@
       "name": "upstream 연결하기(1)",
       "author": "이현승",
       "date": "2025-04-09",
-      "url":"/documentData/pdf3.pdf"
+      "url":"http://52.79.57.3/documentData/pdf3.pdf"
 
     },
     {
@@ -1675,7 +1675,7 @@
       "name": "push 조건 확인하기",
       "author": "이상민",
       "date": "2025-04-07",
-      "url":"/documentData/pdf5.pdf"
+      "url":"http://52.79.57.3/documentData/pdf5.pdf"
 
     },
     {
@@ -1684,7 +1684,7 @@
       "name": "리모트 통째로 내려받기",
       "author": "박영선",
       "date": "2025-04-06",
-      "url":"/documentData/pdf6.pdf"
+      "url":"http://52.79.57.3/documentData/pdf6.pdf"
 
     },
     {
@@ -1693,7 +1693,7 @@
       "name": "reset vs revert",
       "author": "이호성",
       "date": "2025-04-05",
-      "url":"/documentData/pdf7.pdf"
+      "url":"http://52.79.57.3/documentData/pdf7.pdf"
 
     }
   ]

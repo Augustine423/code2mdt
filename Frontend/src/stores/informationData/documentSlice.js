@@ -7,7 +7,7 @@ export const fetchDocuments = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       // Make API request to fetch all documents
-      const response = await axios.get("http://localhost:3003/documents");
+      const response = await axios.get("http://52.79.57.3:3003/documents");
       return response.data;  // Return the response data from the server
     } catch (error) {
       // In case of an error, return the error message
@@ -22,7 +22,7 @@ export const fetchDocumentById = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       // Make API request to fetch material by ID
-      const response = await axios.get(`http://localhost:3003/documents/${id}`);
+      const response = await axios.get(`http://52.79.57.3:3003/documents/${id}`);
       
       
 
