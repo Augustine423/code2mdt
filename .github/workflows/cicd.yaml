@@ -115,6 +115,10 @@ jobs:
             mkdir -p Backend/logs
             echo "Logs directory created"
 
+            # Permission set to upload upload-logs-to-s3.sh
+            chmod 700 upload-logs-to-s3.sh
+            echo "upload-logs-to-s3.sh permissions set"
+
             # Verify docker-compose.yaml exists
             if [ ! -f "docker-compose.yaml" ]; then
               echo "Error: docker-compose.yaml not found in $REPO_DIR"

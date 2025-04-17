@@ -45,16 +45,21 @@ const VideoViewer = ({setVideoView, systemID}) => {
         {
           "Drone_ID": "MDT250101VT001",
           "Vessel ID": "??",
-          "lat": drones.lat,
-          "Ion": drones.lon, 
+          "lat": drones.lat + "° " + (drones.lat >= 0 ? "N" : "S"),
+          "Ion": drones.lon + "° " + (drones.lon >= 0 ? "E" : "W"), 
           "alt": drones.alt,
           "dist_traveled(m)": drones.dist_traveled,
           "wp_dist(m)": drones.wp_dist,
-          "dist_to_home(m)": drones.dist_to_home,
+
+          "dist_to_home(m)": drones.dist_to_home != null ? drones.dist_to_home.toString().replace('.', '').slice(0, 4): null,
+
           "null": null,
-          "wind_vel(m/s)": drones.wind_vel,
-          "airspeed(m/s)": drones.airspeed,
-          "groundspeed(m/s)": drones.ground_speed,
+
+          "wind_vel(m/s)": drones.wind_vel != null ? drones.wind_vel.toFixed(2) : null,
+
+          "airspeed(m/s)": drones.airspeed != null ? drones.airspeed.toFixed(2) : null,
+          
+          "groundspeed(m/s)": drones.ground_speed != null ? drones.ground_speed.toFixed(2) : null,
           "roll": drones.roll,
           "pitch": drones.pitch,
           "yaw": drones.yaw,
@@ -74,6 +79,7 @@ const VideoViewer = ({setVideoView, systemID}) => {
           "blank": null,
         }
       ];
+
       
       //Live_Stream_Drone_Camera
       useEffect(() => {
@@ -196,7 +202,7 @@ const VideoViewer = ({setVideoView, systemID}) => {
       useEffect(() => {
         const connectWebSocket = () => {
           console.log("Attempting WebSocket connection...");
-          const wsUrl = "ws://52.78.238.179:8080/telemetry";
+          const wsUrl = "ws://52.79.57.3:8081/telemetry";
           ws.current = new WebSocket(wsUrl);
     
           ws.current.onopen = () => {
@@ -444,9 +450,9 @@ const VideoViewer = ({setVideoView, systemID}) => {
                     <div className="w-full flex justify-center items-center p-2 bg-primary bg-opacity-[8%] rounded-md text-sm font-semibold">Flight Info</div>
                     
                     <div className="w-full flex flex-wrap mr-2 justify-start items-center text-sm">
-                    {droneData?.length > 0 ? (
+                    {droneData && droneData?.length > 0 ? (
                         Object.entries(droneData[0]).map(([key, value]) => (
-                            <div key={key} className="w-1/3 flex items-center p-[6px] justify-between border-b-0.5">
+                            <div key={key} className="w-1/3 flex items-center p-[8px] justify-between border-b-0.5 text-xs">
                                 <div className="font-semibold">{key}:</div>
                                 <div className="overflow-scroll">{value}</div>
                             </div>
@@ -454,8 +460,6 @@ const VideoViewer = ({setVideoView, systemID}) => {
                         ) : (
                             <div>No drone data available</div>
                     )}
-
-
                     </div>
                 </div>
                 

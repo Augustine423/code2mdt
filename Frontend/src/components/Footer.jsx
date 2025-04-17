@@ -6,7 +6,7 @@ const Footer = () => {
 
   const data=new Date();
   return (
-<div className="w-full mx-auto bottom-0">
+<div className="w-full mx-auto bottom-0 z-50">
   <footer className="px-4 sm:px-6 lg:px-8 py-6 "> 
     <div className="mx-auto max-w-7xl flex flex-col md:flex-row justify-between items-center gap-4"> 
       {/* Logo Section */}
