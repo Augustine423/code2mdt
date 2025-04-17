@@ -27,7 +27,7 @@ export default defineConfig({
 
 resolve: {
     alias: {
-      'pdfjs-dist/build/pdf.worker.mjs': 'pdfjs-dist/build/pdf.worker.entry.js',
+      'pdfjs-dist/build/pdf.worker.mjs': 'pdfjs-dist/build/pdf.worker.min.js',
 
         process: "process/browser", // ✅ Ensures `process` is recognized
         alias: {

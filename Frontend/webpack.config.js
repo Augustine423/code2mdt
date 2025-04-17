@@ -11,3 +11,18 @@ export const module = {
         }
     ]
 };
+
+// export const module = {
+//     // ...
+//     module: {
+//       rules: [
+//         {
+//           test: /pdf\.worker\.min\.js/,
+//           type: 'asset/resource',
+//           generator: {
+//             filename: '[name][ext]'
+//           }
+//         }
+//       ]
+//     }
+//   }
