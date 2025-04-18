@@ -82,21 +82,25 @@ jobs:
               if sudo apt-get install -y python3-gdown; then
                 echo "python3-gdown installed via apt"
               else
-                echo "python3-gdown not available in apt, installing via pip..."
-                # Install pip if not present
-                if ! command -v pip3 >/dev/null 2>&1; then
-                  sudo apt-get install -y python3-pip
-                fi
-                # Install gdown in user space to avoid externally managed environment issue
-                pip3 install --user gdown || { echo "Failed to install gdown via pip"; exit 1; }
-                # Add ~/.local/bin to PATH
-                export PATH="$HOME/.local/bin:$PATH"
+                echo "python3-gdown not available in apt, installing via pip in virtual environment..."
+                # Install python3-venv for virtual environment support
+                sudo apt-get install -y python3-venv
+                # Create and activate virtual environment
+                python3 -m venv /home/ubuntu/gdown-venv
+                source /home/ubuntu/gdown-venv/bin/activate
+                # Install gdown in virtual environment
+                pip install gdown || { echo "Failed to install gdown via pip"; exit 1; }
                 # Verify gdown installation
                 if ! command -v gdown >/dev/null 2>&1; then
                   echo "Error: gdown not found after installation"
                   exit 1
                 fi
               fi
+            fi
+
+            # Activate virtual environment if gdown was installed via pip
+            if [ -d "/home/ubuntu/gdown-venv" ]; then
+              source /home/ubuntu/gdown-venv/bin/activate
             fi
 
             # Clone or update the repo
@@ -168,6 +172,11 @@ jobs:
             # Clean up old Backend .env backups (older than 7 days)
             echo "Cleaning up old Backend .env backups..."
             find /home/ubuntu/code2mdt/Backend/src/main/resources -name "*.env.backup" -mtime +7 -delete
+
+            # Deactivate virtual environment if activated
+            if [ -d "/home/ubuntu/gdown-venv" ]; then
+              deactivate
+            fi
 
             # Create logs directory for backend
             mkdir -p Backend/logs
