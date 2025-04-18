@@ -34,6 +34,16 @@ jobs:
           ssh -i private_key.pem ubuntu@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
             set -e  # Exit on error
 
+            # Remove Docker repository to avoid conflicts
+            if [ -f /etc/apt/sources.list.d/docker.list ]; then
+              sudo rm -f /etc/apt/sources.list.d/docker.list
+            fi
+
+            # Clean up conflicting packages and apt cache
+            sudo apt-get purge -y containerd.io docker-ce docker-ce-cli 2>/dev/null || true
+            sudo apt-get autoremove -y
+            sudo apt-get clean
+
             # Install required packages
             sudo apt-get update -y
             sudo apt-get install -y git python3-pip python3-venv docker.io unzip docker-compose-v2
@@ -132,30 +142,37 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
+
       - name: Configure SSH Known Hosts
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           ssh-keyscan -H ${{ secrets.EC2_INSTANCE_IP }} >> ~/.ssh/known_hosts
+
       - name: Rollback to Previous Version
         run: |
           ssh -i private_key.pem ubuntu@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
             set -e  # Exit on error
+
             BACKUP_DIR="/tmp/code2mdt-backups"
             REPO_DIR="/home/ubuntu/code2mdt"
+
             # Find the most recent backup
             LATEST_BACKUP=$(ls -t "$BACKUP_DIR" | head -n 1)
             if [ -z "$LATEST_BACKUP" ]; then
               echo "No backups found in $BACKUP_DIR"
               exit 1
             fi
+
             # Stop running containers
             cd "$REPO_DIR"
             docker compose down
+
             # Restore the backup
             rm -rf "$REPO_DIR"
             mkdir -p "$REPO_DIR"
             tar -xzf "$BACKUP_DIR/$LATEST_BACKUP" -C /home/ubuntu
+
             # Ensure .env files and logs directory
             if [ -f "Frontend/.env" ]; then
               chmod 600 Frontend/.env
@@ -165,15 +182,19 @@ jobs:
             fi
             mkdir -p Backend/logs
             [ -f upload-logs-to-s3.sh ] && chmod 700 upload-logs-to-s3.sh
+
             # Verify docker-compose.yaml
             [ -f docker-compose.yaml ] || { echo "docker-compose.yaml not found"; exit 1; }
+
             # Rebuild and redeploy
             docker compose build
             docker compose up -d
+
             # Prune unused Docker objects
             docker system prune -a -f
           EOF
           rm -f private_key.pem
+
   restore:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'restore'
@@ -182,36 +203,44 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
+
       - name: Configure SSH Known Hosts
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           ssh-keyscan -H ${{ secrets.EC2_INSTANCE_IP }} >> ~/.ssh/known_hosts
+
       - name: Restore Specific Version
         run: |
           ssh -i private_key.pem ubuntu@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
             set -e  # Exit on error
+
             BACKUP_DIR="/tmp/code2mdt-backups"
             REPO_DIR="/home/ubuntu/code2mdt"
             TIMESTAMP="${{ github.event.inputs.timestamp }}"
+
             # List available backups if no timestamp provided
             if [ -z "$TIMESTAMP" ]; then
               echo "Available backups:"
               ls -l "$BACKUP_DIR"
               exit 1
             fi
+
             # Check if the backup exists
             if [ ! -f "$BACKUP_DIR/$TIMESTAMP.tar.gz" ]; then
               echo "Backup $TIMESTAMP.tar.gz not found in $BACKUP_DIR"
               exit 1
             fi
+
             # Stop running containers
             cd "$REPO_DIR"
             docker compose down
+
             # Restore the backup
             rm -rf "$REPO_DIR"
             mkdir -p "$REPO_DIR"
             tar -xzf "$BACKUP_DIR/$TIMESTAMP.tar.gz" -C /home/ubuntu
+
             # Ensure .env files and logs directory
             if [ -f "Frontend/.env" ]; then
               chmod 600 Frontend/.env
@@ -221,11 +250,14 @@ jobs:
             fi
             mkdir -p Backend/logs
             [ -f upload-logs-to-s3.sh ] && chmod 700 upload-logs-to-s3.sh
+
             # Verify docker-compose.yaml
             [ -f docker-compose.yaml ] || { echo "docker-compose.yaml not found"; exit 1; }
+
             # Rebuild and redeploy
             docker compose build
             docker compose up -d
+
             # Prune unused Docker objects
             docker system prune -a -f
           EOF
