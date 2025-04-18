@@ -88,7 +88,7 @@ jobs:
                 # Create and activate virtual environment
                 python3 -m venv /home/ubuntu/gdown-venv
                 source /home/ubuntu/gdown-venv/bin/activate
-                # Install gdown in virtual environment
+                # Install gdown in restent virtual environment
                 pip install gdown || { echo "Failed to install gdown via pip"; exit 1; }
                 # Verify gdown installation
                 if ! command -v gdown >/dev/null 2>&1; then
@@ -125,7 +125,7 @@ jobs:
             # Download .env file for Frontend
             echo "Downloading .env file for Frontend from Google Drive..."
             FILE_ID_FRONTEND="1F8MUCGpTqjOWvoEUkmBr79m_uuS-usVq"
-            gdown --id "$FILE_ID_FRONTEND" -O Frontend/.env
+            gdown "$FILE_ID_FRONTEND" -O Frontend/.env
             if [ ! -f "Frontend/.env" ]; then
               echo "Error: Failed to download Frontend/.env"
               exit 1
@@ -133,6 +133,14 @@ jobs:
             chmod 600 Frontend/.env
             echo "Frontend/.env downloaded and permissions set"
 
+            # Validate Frontend .env file (example: check for a required variable)
+            echo "Validating Frontend .env file..."
+            if ! grep -q "REACT_APP_API_URL" Frontend/.env; then
+              echo "Error: REACT_APP_API_URL not found in Frontend/.env"
+              echo "Frontend .env content (for debugging):"
+              cat Frontend/.env
+              exit 1
+            fi
 
             # Clean up old Frontend .env backups (older than 7 days)
             echo "Cleaning up old Frontend .env backups..."
@@ -147,8 +155,7 @@ jobs:
             # Download .env file for Backend
             echo "Downloading .env file for Backend from Google Drive..."
             FILE_ID_BACKEND="1mIrLok-BLhRtcW2JIxK5FyXpGl7gCawu"
-            mkdir -p Backend/src/main/resources
-            gdown --id "$FILE_ID_BACKEND" -O Backend/src/main/resources/.env
+            gdown "$FILE_ID_BACKEND" -O Backend/src/main/resources/.env
             if [ ! -f "Backend/src/main/resources/.env" ]; then
               echo "Error: Failed to download Backend/src/main/resources/.env"
               exit 1
@@ -158,8 +165,10 @@ jobs:
 
             # Validate Backend .env file (example: check for a required variable)
             echo "Validating Backend .env file..."
-            if ! grep -q "SPRING_DATASOURCE_URL" Backend/src/main/resources/.env; then
-              echo "Error: SPRING_DATASOURCE_URL not found in Backend/.env"
+            if ! grep -q "DATABASE_URL" Backend/src/main/resources/.env; then
+              echo "Error: DATABASE_URL not found in Backend/.env"
+              echo "Backend .env content (for debugging):"
+              cat Backend/src/main/resources/.env
               exit 1
             fi
 
