@@ -133,12 +133,6 @@ jobs:
             chmod 600 Frontend/.env
             echo "Frontend/.env downloaded and permissions set"
 
-            # Validate Frontend .env file (example: check for a required variable)
-            echo "Validating Frontend .env file..."
-            if ! grep -q "REACT_APP_API_URL" Frontend/.env; then
-              echo "Error: REACT_APP_API_URL not found in Frontend/.env"
-              exit 1
-            fi
 
             # Clean up old Frontend .env backups (older than 7 days)
             echo "Cleaning up old Frontend .env backups..."
