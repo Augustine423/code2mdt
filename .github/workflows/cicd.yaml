@@ -74,12 +74,18 @@ jobs:
               sudo apt-get install -y wget
             fi
 
+            # Install gdown for reliable Google Drive downloads
+            if ! command -v gdown >/dev/null 2>&1; then
+              echo "Installing gdown..."
+              sudo apt-get install -y python3-pip
+              pip3 install gdown
+            fi
+
             # Clone or update the repo
             REPO_DIR="/home/ubuntu/code2mdt"
             if [ -d "$REPO_DIR" ]; then
               echo "Updating existing repo..."
               cd "$REPO_DIR"
-              # Fetch the latest changes and reset to match remote main branch
               git fetch origin
               git reset --hard origin/main || { echo "Git reset failed"; exit 1; }
             else
@@ -88,10 +94,16 @@ jobs:
               cd "$REPO_DIR"
             fi
 
+            # Backup existing Frontend .env file
+            if [ -f "Frontend/.env" ]; then
+              echo "Backing up existing Frontend/.env..."
+              mv Frontend/.env Frontend/.env.backup
+            fi
+
             # Download .env file for Frontend
             echo "Downloading .env file for Frontend from Google Drive..."
             FILE_ID_FRONTEND="1F8MUCGpTqjOWvoEUkmBr79m_uuS-usVq"
-            wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID_FRONTEND" -O Frontend/.env
+            gdown --id "$FILE_ID_FRONTEND" -O Frontend/.env
             if [ ! -f "Frontend/.env" ]; then
               echo "Error: Failed to download Frontend/.env"
               exit 1
@@ -99,11 +111,28 @@ jobs:
             chmod 600 Frontend/.env
             echo "Frontend/.env downloaded and permissions set"
 
+            # Validate Frontend .env file (example: check for a required variable)
+            echo "Validating Frontend .env file..."
+            if ! grep -q "REACT_APP_API_URL" Frontend/.env; then
+              echo "Error: REACT_APP_API_URL not found in Frontend/.env"
+              exit 1
+            fi
+
+            # Clean up old Frontend .env backups (older than 7 days)
+            echo "Cleaning up old Frontend .env backups..."
+            find /home/ubuntu/code2mdt/Frontend -name "*.env.backup" -mtime +7 -delete
+
+            # Backup existing Backend .env file
+            if [ -f "Backend/src/main/resources/.env" ]; then
+              echo "Backing up existing Backend/.env..."
+              mv Backend/src/main/resources/.env Backend/src/main/resources/.env.backup
+            fi
+
             # Download .env file for Backend
             echo "Downloading .env file for Backend from Google Drive..."
             FILE_ID_BACKEND="1mIrLok-BLhRtcW2JIxK5FyXpGl7gCawu"
             mkdir -p Backend/src/main/resources
-            wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID_BACKEND" -O Backend/src/main/resources/.env
+            gdown --id "$FILE_ID_BACKEND" -O Backend/src/main/resources/.env
             if [ ! -f "Backend/src/main/resources/.env" ]; then
               echo "Error: Failed to download Backend/src/main/resources/.env"
               exit 1
@@ -111,11 +140,22 @@ jobs:
             chmod 600 Backend/src/main/resources/.env
             echo "Backend/src/main/resources/.env downloaded and permissions set"
 
+            # Validate Backend .env file (example: check for a required variable)
+            echo "Validating Backend .env file..."
+            if ! grep -q "SPRING_DATASOURCE_URL" Backend/src/main/resources/.env; then
+              echo "Error: SPRING_DATASOURCE_URL not found in Backend/.env"
+              exit 1
+            fi
+
+            # Clean up old Backend .env backups (older than 7 days)
+            echo "Cleaning up old Backend .env backups..."
+            find /home/ubuntu/code2mdt/Backend/src/main/resources -name "*.env.backup" -mtime +7 -delete
+
             # Create logs directory for backend
             mkdir -p Backend/logs
             echo "Logs directory created"
 
-            # Permission set to upload upload-logs-to-s3.sh
+            # Permission set to upload-logs-to-s3.sh
             chmod 700 upload-logs-to-s3.sh
             echo "upload-logs-to-s3.sh permissions set"
 
