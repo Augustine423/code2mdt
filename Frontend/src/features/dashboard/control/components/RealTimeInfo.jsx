@@ -123,7 +123,7 @@ const RealTimeInfo = () => {
               updatedAlt = drone.alt;
               updatedAirSpeed = drone.airspeed;
               updatedGroundSpeed = drone.ground_speed;
-              updatedBattery = drone.battery_voltage;
+              updatedBattery = drone.battery_current;
               const newShipPositions = data.drones.map((drone) => drone.home_location);
               setShipPosition(newShipPositions);
             });
@@ -242,7 +242,7 @@ const [videoView, setVideoView] = useState(false);
           </div>
 
           {/* Vessels Info */}
-          <div className="w-full flex pt-1 pb-1 pl-3 flex-col">
+          <div className="w-full flex pb-1 pl-3 flex-col">
             <div className="w-full flex items-end justify-start gap-1">
               <div className="flex justify-center items-center text-[16px] text-center font-semibold">Vessels Info</div>
               <IoInformationCircle size={"20px"} className="text-gray-400" />
@@ -250,7 +250,7 @@ const [videoView, setVideoView] = useState(false);
             {shipData.map((ship, index) => (
             <div className="w-full flex flex-wrap mt-2 border-b-0.5 text-[14px]">
               {Object.entries(ship).map(([key, value]) => (
-                <div className="w-1/2 flex flex-col mb-2" key={key}>
+                <div className="w-1/2 flex flex-col mb-1" key={key}>
                   <div className="w-full flex items-center text-[12px] text-gray-500">{key}</div>
                   <div className="w-full flex items-center font-semibold">{value}</div>
                 </div>
@@ -259,15 +259,15 @@ const [videoView, setVideoView] = useState(false);
           </div>
 
           {/* Drone Info */}
-          <div className="w-full flex pt-1 pb-1 pl-3 flex-col">
+          <div className="w-full flex pb-1 pl-3 flex-col">
             <div className="w-full flex items-end justify-start gap-1">
               <div className="flex justify-center items-center text-[16px] text-center font-semibold">Drone Info</div>
               <IoInformationCircle size={"20px"} className="text-gray-400" />
             </div>
             {droneDataStatic.map((drone) => (
-            <div className="w-full flex flex-wrap mt-2 border-b-0.5 text-[14px]">
+            <div className="w-full flex flex-wrap mt-1 border-b-0.5 text-[14px]">
               {Object.entries(drone).map(([key, value]) => (
-                <div className="w-1/2 flex flex-col mb-2" key={key}>
+                <div className="w-1/2 flex flex-col mb-1" key={key}>
                   <div className="w-full flex items-center text-[12px] text-gray-500">{key}</div>
                   <div className="w-full flex items-center font-semibold text-primary">{value}</div>
                 </div>
@@ -337,7 +337,7 @@ const [videoView, setVideoView] = useState(false);
 
       <div className="w-full flex-1 relative">
 
-        {isMapView ? (<MapContainer center={[35.0767, 129.0921]} zoom={13} style={{ height: "100vh", width: "100%" }}  className="z-0 w-full h-full" zoomControl={false}
+        {isMapView ? (<MapContainer center={[35.0767, 129.0921]} zoom={7} style={{ height: "100vh", width: "100%" }}  className="z-0 w-full h-full" zoomControl={false}
                   trackResize={true}
                   attributionControl={false}>
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
@@ -387,7 +387,8 @@ const [videoView, setVideoView] = useState(false);
               </>
               ))}
             </MapContainer>):
-            (<FlightData/>)
+            (<FlightData 
+                drones={drones}/>)
           }
       </div>
 
