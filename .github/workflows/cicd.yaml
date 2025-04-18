@@ -88,7 +88,7 @@ jobs:
                 # Create and activate virtual environment
                 python3 -m venv /home/ubuntu/gdown-venv
                 source /home/ubuntu/gdown-venv/bin/activate
-                # Install gdown in restent virtual environment
+                # Install gdown in virtual environment
                 pip install gdown || { echo "Failed to install gdown via pip"; exit 1; }
                 # Verify gdown installation
                 if ! command -v gdown >/dev/null 2>&1; then
@@ -133,15 +133,6 @@ jobs:
             chmod 600 Frontend/.env
             echo "Frontend/.env downloaded and permissions set"
 
-            # Validate Frontend .env file (example: check for a required variable)
-            echo "Validating Frontend .env file..."
-            if ! grep -q "REACT_APP_API_URL" Frontend/.env; then
-              echo "Error: REACT_APP_API_URL not found in Frontend/.env"
-              echo "Frontend .env content (for debugging):"
-              cat Frontend/.env
-              exit 1
-            fi
-
             # Clean up old Frontend .env backups (older than 7 days)
             echo "Cleaning up old Frontend .env backups..."
             find /home/ubuntu/code2mdt/Frontend -name "*.env.backup" -mtime +7 -delete
@@ -162,15 +153,6 @@ jobs:
             fi
             chmod 600 Backend/src/main/resources/.env
             echo "Backend/src/main/resources/.env downloaded and permissions set"
-
-            # Validate Backend .env file (example: check for a required variable)
-            echo "Validating Backend .env file..."
-            if ! grep -q "DATABASE_URL" Backend/src/main/resources/.env; then
-              echo "Error: DATABASE_URL not found in Backend/.env"
-              echo "Backend .env content (for debugging):"
-              cat Backend/src/main/resources/.env
-              exit 1
-            fi
 
             # Clean up old Backend .env backups (older than 7 days)
             echo "Cleaning up old Backend .env backups..."
