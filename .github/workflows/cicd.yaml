@@ -90,7 +90,7 @@ jobs:
 
             # Download .env file for Frontend
             echo "Downloading .env file for Frontend from Google Drive..."
-            FILE_ID_FRONTEND="1F8MUCGpTqjOWvoEUkmBr79m_uuS-usVq"
+            FILE_ID_FRONTEND="1XP9W7uCltzU8IC61I7nA9HDKRdom_Q7u"
             wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID_FRONTEND" -O Frontend/.env
             if [ ! -f "Frontend/.env" ]; then
               echo "Error: Failed to download Frontend/.env"
