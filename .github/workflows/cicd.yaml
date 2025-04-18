@@ -74,12 +74,17 @@ jobs:
               sudo apt-get install -y wget
             fi
 
-            # Install gdown for reliable Google Drive downloads
+            # Install python3-pip and gdown
             if ! command -v gdown >/dev/null 2>&1; then
-              echo "Installing gdown..."
+              echo "Installing python3-pip and gdown..."
               sudo apt-get install -y python3-pip
-              pip3 install gdown
+              pip3 install --user gdown || { echo "Failed to install gdown"; exit 1; }
+              export PATH="$HOME/.local/bin:$PATH"
             fi
+
+            # Verify gdown installation
+            echo "Verifying gdown installation..."
+            gdown --version || { echo "gdown not found after installation"; exit 1; }
 
             # Clone or update the repo
             REPO_DIR="/home/ubuntu/code2mdt"
@@ -103,7 +108,10 @@ jobs:
             # Download .env file for Frontend
             echo "Downloading .env file for Frontend from Google Drive..."
             FILE_ID_FRONTEND="1F8MUCGpTqjOWvoEUkmBr79m_uuS-usVq"
-            gdown --id "$FILE_ID_FRONTEND" -O Frontend/.env
+            gdown --id "$FILE_ID_FRONTEND" -O Frontend/.env || {
+              echo "gdown failed, attempting wget as fallback..."
+              wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID_FRONTEND" -O Frontend/.env
+            }
             if [ ! -f "Frontend/.env" ]; then
               echo "Error: Failed to download Frontend/.env"
               exit 1
@@ -132,7 +140,10 @@ jobs:
             echo "Downloading .env file for Backend from Google Drive..."
             FILE_ID_BACKEND="1mIrLok-BLhRtcW2JIxK5FyXpGl7gCawu"
             mkdir -p Backend/src/main/resources
-            gdown --id "$FILE_ID_BACKEND" -O Backend/src/main/resources/.env
+            gdown --id "$FILE_ID_BACKEND" -O Backend/src/main/resources/.env || {
+              echo "gdown failed, attempting wget as fallback..."
+              wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID_BACKEND" -O Backend/src/main/resources/.env
+            }
             if [ ! -f "Backend/src/main/resources/.env" ]; then
               echo "Error: Failed to download Backend/src/main/resources/.env"
               exit 1
