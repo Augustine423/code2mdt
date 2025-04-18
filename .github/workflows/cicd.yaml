@@ -14,7 +14,7 @@ jobs:
 
       - name: Set up SSH Key
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | sed 's/\$/$$/g' > private_key.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | sed 's/\$/$$  /g' > private_key.pem
           chmod 600 private_key.pem
 
       - name: Build on EC2
@@ -68,23 +68,36 @@ jobs:
               sudo chmod +x /usr/local/bin/docker-compose
             fi
 
-            # Install wget for downloading .env files
+            # Install wget for fallback or other uses
             if ! command -v wget >/dev/null 2>&1; then
               echo "Installing wget..."
               sudo apt-get install -y wget
             fi
 
-            # Install python3-pip and gdown
+            # Install gdown
             if ! command -v gdown >/dev/null 2>&1; then
-              echo "Installing python3-pip and gdown..."
-              sudo apt-get install -y python3-pip
-              pip3 install --user gdown || { echo "Failed to install gdown"; exit 1; }
-              export PATH="$HOME/.local/bin:$PATH"
+              echo "Installing gdown..."
+              sudo apt-get update -y
+              # Try installing python3-gdown via apt if available
+              if sudo apt-get install -y python3-gdown; then
+                echo "python3-gdown installed via apt"
+              else
+                echo "python3-gdown not available in apt, installing via pip..."
+                # Install pip if not present
+                if ! command -v pip3 >/dev/null 2>&1; then
+                  sudo apt-get install -y python3-pip
+                fi
+                # Install gdown in user space to avoid externally managed environment issue
+                pip3 install --user gdown || { echo "Failed to install gdown via pip"; exit 1; }
+                # Add ~/.local/bin to PATH
+                export PATH="$HOME/.local/bin:$PATH"
+                # Verify gdown installation
+                if ! command -v gdown >/dev/null 2>&1; then
+                  echo "Error: gdown not found after installation"
+                  exit 1
+                fi
+              fi
             fi
-
-            # Verify gdown installation
-            echo "Verifying gdown installation..."
-            gdown --version || { echo "gdown not found after installation"; exit 1; }
 
             # Clone or update the repo
             REPO_DIR="/home/ubuntu/code2mdt"
@@ -108,10 +121,7 @@ jobs:
             # Download .env file for Frontend
             echo "Downloading .env file for Frontend from Google Drive..."
             FILE_ID_FRONTEND="1F8MUCGpTqjOWvoEUkmBr79m_uuS-usVq"
-            gdown --id "$FILE_ID_FRONTEND" -O Frontend/.env || {
-              echo "gdown failed, attempting wget as fallback..."
-              wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID_FRONTEND" -O Frontend/.env
-            }
+            gdown --id "$FILE_ID_FRONTEND" -O Frontend/.env
             if [ ! -f "Frontend/.env" ]; then
               echo "Error: Failed to download Frontend/.env"
               exit 1
@@ -140,10 +150,7 @@ jobs:
             echo "Downloading .env file for Backend from Google Drive..."
             FILE_ID_BACKEND="1mIrLok-BLhRtcW2JIxK5FyXpGl7gCawu"
             mkdir -p Backend/src/main/resources
-            gdown --id "$FILE_ID_BACKEND" -O Backend/src/main/resources/.env || {
-              echo "gdown failed, attempting wget as fallback..."
-              wget --no-check-certificate "https://drive.google.com/uc?export=download&id=$FILE_ID_BACKEND" -O Backend/src/main/resources/.env
-            }
+            gdown --id "$FILE_ID_BACKEND" -O Backend/src/main/resources/.env
             if [ ! -f "Backend/src/main/resources/.env" ]; then
               echo "Error: Failed to download Backend/src/main/resources/.env"
               exit 1
@@ -192,7 +199,7 @@ jobs:
     steps:
       - name: Set up SSH Key
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | sed 's/\$/$$/g' > private_key.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | sed 's/\$/  $$/g' > private_key.pem
           chmod 600 private_key.pem
 
       - name: Deploy to EC2
