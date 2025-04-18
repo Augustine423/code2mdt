@@ -1,44 +1,45 @@
-name: Deploy to EC2
+```yaml
+name: Deploy to EC2 with Rollback and Restore
 
 on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform (deploy, leave blank for default deploy)'
+        required: false
+        default: 'deploy'
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'deploy')
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Set up SSH Key
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | sed 's/\$/$$  /g' > private_key.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
-      - name: Build on EC2
+      - name: Configure SSH Known Hosts
         run: |
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
-            set -x  # Enable debug mode for tracing
-            echo "Connected to EC2 for Build"
+          ssh-keyscan -H ${{ secrets.EC2_INSTANCE_IP }} >> ~/.ssh/known_hosts
 
-            # Install Git
-            if ! command -v git >/dev/null 2>&1; then
-              echo "Installing Git..."
-              sudo apt-get update -y
-              sudo apt-get install -y git
-            fi
+      - name: Build and Deploy on EC2
+        run: |
+          ssh -i private_key.pem ubuntu@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
+            set -e  # Exit on error
 
-            # Install unzip (for AWS CLI)
-            if ! command -v unzip >/dev/null 2>&1; then
-              echo "Installing unzip..."
-              sudo apt-get install -y unzip
-            fi
+            # Install required packages
+            sudo apt-get update -y
+            sudo apt-get install -y git python3-pip python3-venv docker.io unzip docker-compose-v2
 
-            # Install AWS CLI
+            # Configure Docker
+            sudo usermod -aG docker ubuntu
+            sudo systemctl enable docker --now
+
+            # Install AWS CLI if not present
             if ! command -v aws >/dev/null 2>&1; then
-              echo "Installing AWS CLI..."
               curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
               unzip awscliv2.zip
               sudo ./aws/install
@@ -46,186 +47,200 @@ jobs:
             fi
 
             # Configure AWS CLI
-            echo "Configuring AWS CLI..."
             aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
             aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
             aws configure set default.region "${{ secrets.AWS_REGION }}"
-            aws configure set output "json"
 
-            # Install Docker
-            if ! command -v docker >/dev/null 2>&1; then
-              echo "Installing Docker..."
-              sudo apt-get install -y docker.io
-              sudo systemctl start docker
-              sudo systemctl enable docker
-              sudo usermod -aG docker ubuntu
-            fi
-
-            # Install Docker Compose
-            if ! command -v docker-compose >/dev/null 2>&1; then
-              echo "Installing Docker Compose..."
-              sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-              sudo chmod +x /usr/local/bin/docker-compose
-            fi
-
-            # Install wget for fallback or other uses
-            if ! command -v wget >/dev/null 2>&1; then
-              echo "Installing wget..."
-              sudo apt-get install -y wget
-            fi
-
-            # Install gdown
+            # Install gdown in a virtual environment
             if ! command -v gdown >/dev/null 2>&1; then
-              echo "Installing gdown..."
-              sudo apt-get update -y
-              # Try installing python3-gdown via apt if available
-              if sudo apt-get install -y python3-gdown; then
-                echo "python3-gdown installed via apt"
-              else
-                echo "python3-gdown not available in apt, installing via pip in virtual environment..."
-                # Install python3-venv for virtual environment support
-                sudo apt-get install -y python3-venv
-                # Create and activate virtual environment
-                python3 -m venv /home/ubuntu/gdown-venv
-                source /home/ubuntu/gdown-venv/bin/activate
-                # Install gdown in virtual environment
-                pip install gdown || { echo "Failed to install gdown via pip"; exit 1; }
-                # Verify gdown installation
-                if ! command -v gdown >/dev/null 2>&1; then
-                  echo "Error: gdown not found after installation"
-                  exit 1
-                fi
-              fi
+              python3 -m venv /home/ubuntu/gdown-venv
+              . /home/ubuntu/gdown-venv/bin/activate
+              pip install gdown
             fi
+            . /home/ubuntu/gdown-venv/bin/activate
 
-            # Activate virtual environment if gdown was installed via pip
-            if [ -d "/home/ubuntu/gdown-venv" ]; then
-              source /home/ubuntu/gdown-venv/bin/activate
+            # Backup current code
+            BACKUP_DIR="/tmp/code2mdt-backups"
+            TIMESTAMP=$(date +%Y%m%d%H%M%S)
+            mkdir -p "$BACKUP_DIR"
+            if [ -d "/home/ubuntu/code2mdt" ]; then
+              tar -czf "$BACKUP_DIR/$TIMESTAMP.tar.gz" -C /home/ubuntu code2mdt
             fi
+            # Keep only the last 3 backups
+            ls -t "$BACKUP_DIR" | tail -n +4 | xargs -I {} rm -f "$BACKUP_DIR/{}"
 
-            # Clone or update the repo
+            # Clone or update repository
             REPO_DIR="/home/ubuntu/code2mdt"
             if [ -d "$REPO_DIR" ]; then
-              echo "Updating existing repo..."
               cd "$REPO_DIR"
               git fetch origin
-              git reset --hard origin/main || { echo "Git reset failed"; exit 1; }
+              git reset --hard origin/main
             else
-              echo "Cloning repo..."
-              git clone https://github.com/Augustine423/code2mdt.git "$REPO_DIR" || { echo "Git clone failed"; exit 1; }
+              git clone https://github.com/Augustine423/code2mdt.git "$REPO_DIR"
               cd "$REPO_DIR"
             fi
 
-            # Backup existing Frontend .env file
+            # Manage Frontend .env
             if [ -f "Frontend/.env" ]; then
-              echo "Backing up existing Frontend/.env..."
               mv Frontend/.env Frontend/.env.backup
             fi
-
-            # Download .env file for Frontend
-            echo "Downloading .env file for Frontend from Google Drive..."
-            FILE_ID_FRONTEND="1F8MUCGpTqjOWvoEUkmBr79m_uuS-usVq"
-            gdown "$FILE_ID_FRONTEND" -O Frontend/.env
-            if [ ! -f "Frontend/.env" ]; then
-              echo "Error: Failed to download Frontend/.env"
-              exit 1
-            fi
+            gdown "1F8MUCGpTqjOWvoEUkmBr79m_uuS-usVq" -O Frontend/.env
+            [ -f "Frontend/.env" ] || { echo "Failed to download Frontend .env"; exit 1; }
             chmod 600 Frontend/.env
-            echo "Frontend/.env downloaded and permissions set"
-
-            # Clean up old Frontend .env backups (older than 7 days)
-            echo "Cleaning up old Frontend .env backups..."
             find /home/ubuntu/code2mdt/Frontend -name "*.env.backup" -mtime +7 -delete
 
-            # Backup existing Backend .env file
+            # Manage Backend .env
             if [ -f "Backend/src/main/resources/.env" ]; then
-              echo "Backing up existing Backend/.env..."
               mv Backend/src/main/resources/.env Backend/src/main/resources/.env.backup
             fi
-
-            # Download .env file for Backend
-            echo "Downloading .env file for Backend from Google Drive..."
-            FILE_ID_BACKEND="1mIrLok-BLhRtcW2JIxK5FyXpGl7gCawu"
-            gdown "$FILE_ID_BACKEND" -O Backend/src/main/resources/.env
-            if [ ! -f "Backend/src/main/resources/.env" ]; then
-              echo "Error: Failed to download Backend/src/main/resources/.env"
-              exit 1
-            fi
+            gdown "1mIrLok-BLhRtcW2JIxK5FyXpGl7gCawu" -O Backend/src/main/resources/.env
+            [ -f "Backend/src/main/resources/.env" ] || { echo "Failed to download Backend .env"; exit 1; }
             chmod 600 Backend/src/main/resources/.env
-            echo "Backend/src/main/resources/.env downloaded and permissions set"
-
-            # Clean up old Backend .env backups (older than 7 days)
-            echo "Cleaning up old Backend .env backups..."
             find /home/ubuntu/code2mdt/Backend/src/main/resources -name "*.env.backup" -mtime +7 -delete
 
-            # Deactivate virtual environment if activated
-            if [ -d "/home/ubuntu/gdown-venv" ]; then
-              deactivate
-            fi
+            # Deactivate virtual environment
+            deactivate
 
-            # Create logs directory for backend
+            # Create logs directory
             mkdir -p Backend/logs
-            echo "Logs directory created"
 
-            # Permission set to upload-logs-to-s3.sh
-            chmod 700 upload-logs-to-s3.sh
-            echo "upload-logs-to-s3.sh permissions set"
+            # Set permissions for upload-logs-to-s3.sh if it exists
+            [ -f upload-logs-to-s3.sh ] && chmod 700 upload-logs-to-s3.sh
 
-            # Verify docker-compose.yaml exists
-            if [ ! -f "docker-compose.yaml" ]; then
-              echo "Error: docker-compose.yaml not found in $REPO_DIR"
-              exit 1
-            fi
+            # Verify docker-compose.yaml
+            [ -f docker-compose.yaml ] || { echo "docker-compose.yaml not found"; exit 1; }
 
-            # Build and tag images with version
-            COMMIT_SHA=$(git rev-parse --short HEAD) || { echo "Failed to get commit SHA"; exit 1; }
-            echo "Building services with tag: $COMMIT_SHA"
-            timeout 30m docker-compose build --no-cache > build.log 2>&1 || { echo "Build timed out or failed"; cat build.log; exit 1; }
-            docker tag code2mdt-frontend:latest frontend:"$COMMIT_SHA"
-            docker tag code2mdt-backend:latest backend:"$COMMIT_SHA"
-            docker tag code2mdt-backend1:latest backend1:"$COMMIT_SHA"
+            # Build and deploy
+            docker compose down  # Stop existing containers
+            docker compose build  # Use caching for faster builds
+            docker compose up -d  # Deploy in detached mode
+
+            # Prune unused Docker objects
+            docker system prune -a -f
           EOF
           rm -f private_key.pem
 
-  deploy:
-    needs: build
+  rollback:
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'rollback'
     steps:
       - name: Set up SSH Key
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | sed 's/\$/  $$/g' > private_key.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
-      - name: Deploy to EC2
+      - name: Configure SSH Known Hosts
         run: |
-          ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
-            echo "Connected to EC2 for Deploy"
+          ssh-keyscan -H ${{ secrets.EC2_INSTANCE_IP }} >> ~/.ssh/known_hosts
 
-            # Navigate to project directory
-            cd /home/ubuntu/code2mdt
+      - name: Rollback to Previous Version
+        run: |
+          ssh -i private_key.pem ubuntu@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
+            set -e  # Exit on error
 
-            # Stop any running containers
-            echo "Stopping running containers..."
-            docker-compose down || { echo "Failed to stop containers"; exit 1; }
+            BACKUP_DIR="/tmp/code2mdt-backups"
+            REPO_DIR="/home/ubuntu/code2mdt"
 
-            # Get current commit SHA
-            COMMIT_SHA=$(git rev-parse --short HEAD) || { echo "Failed to get commit SHA"; exit 1; }
-            echo "Current commit SHA: $COMMIT_SHA"
+            # Find the most recent backup
+            LATEST_BACKUP=$(ls -t "$BACKUP_DIR" | head -n 1)
+            if [ -z "$LATEST_BACKUP" ]; then
+              echo "No backups found in $BACKUP_DIR"
+              exit 1
+            fi
 
-            # Deploy the new version
-            echo "Deploying with latest tags..."
-            docker-compose up -d || { echo "Failed to deploy containers"; exit 1; }
+            # Stop running containers
+            cd "$REPO_DIR"
+            docker compose down
 
-            # Prune all unused Docker objects after successful deployment
-            echo "Pruning all unused Docker objects..."
-            docker system prune -a -f || { echo "Failed to prune Docker system"; exit 1; }
+            # Restore the backup
+            rm -rf "$REPO_DIR"
+            mkdir -p "$REPO_DIR"
+            tar -xzf "$BACKUP_DIR/$LATEST_BACKUP" -C /home/ubuntu
 
-            # Show running containers
-            echo "Running containers:"
-            docker ps -a
+            # Ensure .env files and logs directory
+            if [ -f "Frontend/.env" ]; then
+              chmod 600 Frontend/.env
+            fi
+            if [ -f "Backend/src/main/resources/.env" ]; then
+              chmod 600 Backend/src/main/resources/.env
+            fi
+            mkdir -p Backend/logs
+            [ -f upload-logs-to-s3.sh ] && chmod 700 upload-logs-to-s3.sh
 
-            # Show remaining images for verification
-            echo "Remaining Docker images:"
-            docker images
+            # Verify docker-compose.yaml
+            [ -f docker-compose.yaml ] || { echo "docker-compose.yaml not found"; exit 1; }
+
+            # Rebuild and redeploy
+            docker compose build
+            docker compose up -d
+
+            # Prune unused Docker objects
+            docker system prune -a -f
+          EOF
+          rm -f private_key.pem
+
+  restore:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'restore'
+    steps:
+      - name: Set up SSH Key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+
+      - name: Configure SSH Known Hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.EC2_INSTANCE_IP }} >> ~/.ssh/known_hosts
+
+      - name: Restore Specific Version
+        run: |
+          ssh -i private_key.pem ubuntu@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
+            set -e  # Exit on error
+
+            BACKUP_DIR="/tmp/code2mdt-backups"
+            REPO_DIR="/home/ubuntu/code2mdt"
+            TIMESTAMP="${{ github.event.inputs.timestamp }}"
+
+            # List available backups if no timestamp provided
+            if [ -z "$TIMESTAMP" ]; then
+              echo "Available backups:"
+              ls -l "$BACKUP_DIR"
+              exit 1
+            fi
+
+            # Check if the backup exists
+            if [ ! -f "$BACKUP_DIR/$TIMESTAMP.tar.gz" ]; then
+              echo "Backup $TIMESTAMP.tar.gz not found in $BACKUP_DIR"
+              exit 1
+            fi
+
+            # Stop running containers
+            cd "$REPO_DIR"
+            docker compose down
+
+            # Restore the backup
+            rm -rf "$REPO_DIR"
+            mkdir -p "$REPO_DIR"
+            tar -xzf "$BACKUP_DIR/$TIMESTAMP.tar.gz" -C /home/ubuntu
+
+            # Ensure .env files and logs directory
+            if [ -f "Frontend/.env" ]; then
+              chmod 600 Frontend/.env
+            fi
+            if [ -f "Backend/src/main/resources/.env" ]; then
+              chmod 600 Backend/src/main/resources/.env
+            fi
+            mkdir -p Backend/logs
+            [ -f upload-logs-to-s3.sh ] && chmod 700 upload-logs-to-s3.sh
+
+            # Verify docker-compose.yaml
+            [ -f docker-compose.yaml ] || { echo "docker-compose.yaml not found"; exit 1; }
+
+            # Rebuild and redeploy
+            docker compose build
+            docker compose up -d
+
+            # Prune unused Docker objects
+            docker system prune -a -f
           EOF
           rm -f private_key.pem
