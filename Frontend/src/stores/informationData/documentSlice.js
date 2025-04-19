@@ -7,7 +7,7 @@ export const fetchDocuments = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       // Make API request to fetch all documents
-      const response = await axios.get("http://www.aioceaneye.com/documents");
+      const response = await axios.get("http://52.79.57.3:3003/documents");
       return response.data;  // Return the response data from the server
     } catch (error) {
       // In case of an error, return the error message
